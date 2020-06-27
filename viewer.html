@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mearns Academy</title>
+   <link href="JS/Video/video.js/dist/video-js.min.css" rel="stylesheet">
+   <link href="JS/Video/videojs-vr/dist/videojs-vr.css" rel="stylesheet">
+</head>
+<body>
+
+<link rel="stylesheet" href="JS/3D Viewer/dist/photo-sphere-viewer.css"/>
+
+<script src="JS/3D Viewer/three.js-master/build/three.min.js"></script>
+<script src="JS/3D Viewer/uEvent-2.0.0/browser.js"></script>
+<script src="JS/3D Viewer/dist/photo-sphere-viewer.js"></script>
+<script src="JS/3D Viewer/polyfill.min.js"></script>
+
+<!-- base imports of PSV and dependencies -->
+<script src="JS/3D Viewer/dist/plugins/markers.js"></script>
+<link rel="stylesheet" href="JS/3D Viewer/dist/plugins/markers.css"/>
+
+<center><div id="viewer" style="left:0; top:0; position:absolute"></div></center>
+<style>
+  /* the viewer container must have a defined size */
+  #viewer {
+    width: 100vw;
+    height: 100vh;
+	left: 0;
+	top: 0;
+  }
+</style>
+
+<script>
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const path = urlParams.get('folder') || '';
+  const defaultRoom = urlParams.get('start') || 'default';
+  const defaultCameraWidth = 5376;
+  const defaultCameraHeight = 2688;
+
+  var viewer = new PhotoSphereViewer.Viewer({
+    plugins: [
+      [PhotoSphereViewer.MarkersPlugin, {
+      }], 
+    ],
+    container: document.querySelector('#viewer'),
+    panorama: 'default.jpg'
+  });
+
+  function hideVideo3D() {
+      var video = document.getElementById('videojs-vr-player');
+	  var myPlayer = videojs('videojs-vr-player');
+      video.style.visibility = "hidden";
+	  document.getElementById('viewer').style.visibility = "visible";
+	  myPlayer.hide();
+	  document.getElementById('closer').style.visibility = "hidden";
+	  myPlayer.pause();
+  }
+  
+  function myFullscreen() {
+    if (document.fullscreenElement != null) {
+	  document.exitFullscreen();
+	}
+	else {
+      document.documentElement.requestFullscreen();
+	}
+  }
+
+  function loadNewRoom(room, x, y, id) {
+    markersPlugin.clearMarkers();
+	var img = path+room+'.jpg';
+
+	  var script = document.createElement('script');
+	  script.onload = function () {
+	  
+	  	var sData = getData();
+	    if (id != null) {
+		  var fMarker = sData.markers.find((mark) => {return mark.id == id});
+		  if (fMarker) {
+		    // turn 180deg on the x coord and invert the y coord.
+  			x = ((fMarker.x + sData.data.height) % sData.data.width);
+			y = sData.data.height /2 //- fMarker.y;
+		  }
+		}
+		else if(sData) {
+		  if (x==null) { x=sData.data.height || defaultCameraHeight};
+		  if (y==null) { y=sData.data.height/2 || defaultCameraHeight/2};
+		}
+		else {
+		  if (x==null) { x=defaultCameraHeight};
+		  if (y==null) { y=defaultCameraHeight/2};
+		}
+		
+	  	viewer.setPanorama(img, {x:x,y:y, transition:false} ).then(() => {
+	      runMarkerUpdate();
+		  viewer.zoom(0);
+	    });
+	  };
+	  script.src = path+room+'.js';
+	  document.head.appendChild(script);
+  }
+  
+  function play3DVideo(src, x, y) {
+	var viewerC = document.getElementById('viewer');
+	viewerC.style.visibility = "hidden";
+	document.getElementById('closer').style.visibility = "visible";
+	var video = document.getElementById('videojs-vr-player');
+	var myPlayer = videojs('videojs-vr-player');
+
+	video.style.visibility = "visible";
+    myPlayer.src({type: 'video/mp4', src: src});
+    myPlayer.show();	
+
+	player.on('ended', function() {
+      hideVideo3D();
+    });
+
+
+	/*myPlayer.vr().camera.rotateX(x);
+	myPlayer.vr().camera.rotateY(y);
+	myPlayer.vr().camera.lookAt(0,100,0);*/
+	myPlayer.play();
+	myPlayer.vr().camera.rotation.x = 1000;
+	myPlayer.vr().camera.rotation.y = y;
+
+  }
+
+const markersPlugin = viewer.getPlugin(PhotoSphereViewer.MarkersPlugin);
+/* Marker update functions */
+markersPlugin.on('select-marker', (e, marker) => { 
+  if (marker.data.type=="3Droom") {
+    loadNewRoom(marker.data.room, marker.data.x, marker.data.y, marker.data.id);
+  }
+  if (marker.data.type=="3Dvideo") {
+    var coord = viewer.getPosition();
+    play3DVideo(marker.data.src, coord.longitude, coord.latitude);
+  }
+  if (marker.data.type=="url") {
+	window.location.href = marker.data.url;
+  }
+ 	
+});
+
+viewer.enterFullscreen = function() {myFullscreen()};
+
+loadNewRoom(defaultRoom, null, null);
+
+</script>
+
+  <video id="videojs-vr-player" class="video-js vjs-default-skin" style="width:100%; height:100%; position:absolute; z-index:10; top:0; left:0" controls playsinline>
+    <source src="Video/eagle-360.mp4" type="video/mp4">
+  </video>
+
+  <script src="JS/Video/video.js/dist/video.min.js"></script>
+  <script src="JS/Video/videojs-vr/dist/videojs-vr.min.js"></script>
+  <script>
+    (function(window, videojs) {
+      var player = window.player = videojs('videojs-vr-player');
+      player.mediainfo = player.mediainfo || {};
+      player.mediainfo.projection = '360';
+
+      /*IDK overriding fullscreen button */
+      player.requestFullscreen = function() {myFullscreen()};
+
+      // AUTO is the default and looks at mediainfo
+      var vr = window.vr = player.vr({projection: 'AUTO', debug: true, forceCardboard: false, motionControls: false});
+    }(window, window.videojs));
+  
+  document.getElementById('videojs-vr-player').style.visibility = "hidden";
+  
+  </script>
+<img id="closer" src="assets/close.png" style="position:absolute; z-index:150; top:0; left:0; visibility:hidden; opacity:0.5" onclick="hideVideo3D()">
+</body>
+</html>
