@@ -40,8 +40,8 @@ var markers = {
 	  },],
    }
 
-function getData() {
-  return {markers:markers, data:data};
+function getData(tourID) {
+  return {markers:markers[tourID], data:data};
 }
 
 function runMarkerUpdate(tourID) {
