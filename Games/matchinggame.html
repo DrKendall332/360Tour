@@ -1,0 +1,139 @@
+<script>
+	function shuffle(array) {
+	var currentIndex = array.length, temporaryValue, randomIndex;
+	
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+	
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+	
+		// And swap it with the current element.
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
+	
+	return array;
+	}
+
+	function initPuzzle() {
+
+		var h = (document.documentElement.clientHeight-40)/7;
+		var w = document.documentElement.clientWidth/2;
+		var imgSqDimension  = Math.floor(Math.min(h,w));
+
+		shuffle(order);
+		for (i=0; i<order.length; i++) {
+			var symbol = document.createElement("img");
+			var target = document.getElementById(""+(i+1));
+			symbol.src = order[i]+".gif";
+			symbol.alt = alt[order[i]-1];
+			symbol.style = "width:" +imgSqDimension+ "; height:" +imgSqDimension;
+			target.appendChild(symbol);
+		}
+	}
+	
+	function markGame() {
+		var mark=0;
+		for (i=0; i<order.length; i++) {
+			var ans = document.getElementById("s"+(i+1)).value;
+			if (ans == order[i]) {
+				mark += 1;
+			}
+		}
+		alert("You scored "+mark+" out of 7!");
+	}
+	
+	var order = ["1","2","3","4","5","6","7"];
+	//var symbolSrcs = ["Flammable", "Corrosive", "Oxidising", "Health", "Environment", "Toxic", "Caution"];
+	var alt = [".|^|.", "_'_==>", ".|Ô|.", "/(*)\\", ">( , x)", ">X_X<", "<!>"];
+	
+	
+	
+</script>
+<body onload="initPuzzle()">
+
+<table width = 100%>
+<tr><td id="1"></td><td>
+	<select id="s1">
+		<option value="1">Flammable</option>
+		<option value="2">Corrosive</option>
+		<option value="3">Oxidising</option>
+		<option value="4">Hazardous to Health</option>
+		<option value="5">Damaging to the Environment</option>
+		<option value="6">Toxic</option>
+		<option value="7">Caution</option>
+	</select>
+</td></tr>
+<tr><td id="2"></td><td>
+	<select id="s2">
+		<option value="1">Flammable</option>
+		<option value="2">Corrosive</option>
+		<option value="3">Oxidising</option>
+		<option value="4">Hazardous to Health</option>
+		<option value="5">Damaging to the Environment</option>
+		<option value="6">Toxic</option>
+		<option value="7">Caution</option>
+	</select>
+</td></tr>
+<tr><td id="3"></td><td>
+	<select id="s3">
+		<option value="1">Flammable</option>
+		<option value="2">Corrosive</option>
+		<option value="3">Oxidising</option>
+		<option value="4">Hazardous to Health</option>
+		<option value="5">Damaging to the Environment</option>
+		<option value="6">Toxic</option>
+		<option value="7">Caution</option>
+	</select>
+</td></tr>
+<tr><td id="4"></td><td>
+	<select id="s4">
+		<option value="1">Flammable</option>
+		<option value="2">Corrosive</option>
+		<option value="3">Oxidising</option>
+		<option value="4">Hazardous to Health</option>
+		<option value="5">Damaging to the Environment</option>
+		<option value="6">Toxic</option>
+		<option value="7">Caution</option>
+	</select>
+</td></tr>
+<tr><td id="5"></td><td>
+	<select id="s5">
+		<option value="1">Flammable</option>
+		<option value="2">Corrosive</option>
+		<option value="3">Oxidising</option>
+		<option value="4">Hazardous to Health</option>
+		<option value="5">Damaging to the Environment</option>
+		<option value="6">Toxic</option>
+		<option value="7">Caution</option>
+	</select>
+</td></tr>
+<tr><td id="6"></td><td>
+	<select id="s6">
+		<option value="1">Flammable</option>
+		<option value="2">Corrosive</option>
+		<option value="3">Oxidising</option>
+		<option value="4">Hazardous to Health</option>
+		<option value="5">Damaging to the Environment</option>
+		<option value="6">Toxic</option>
+		<option value="7">Caution</option>
+	</select>
+</td></tr>
+<tr><td id="7"></td><td>
+	<select id="s7">
+		<option value="1">Flammable</option>
+		<option value="2">Corrosive</option>
+		<option value="3">Oxidising</option>
+		<option value="4">Hazardous to Health</option>
+		<option value="5">Damaging to the Environment</option>
+		<option value="6">Toxic</option>
+		<option value="7">Caution</option>
+	</select>
+</td></tr>
+<tr><td></td><td><button id="mark" onclick="markGame()" style="width:110px; height:30px;font-size:12px">Submit Solution</button></td></tr>
+</table>
+
+</body>
