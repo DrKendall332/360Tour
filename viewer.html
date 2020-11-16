@@ -144,6 +144,8 @@ markersPlugin.on('select-marker', (e, marker) => {
 	document.getElementById("gamePane").style.height = window.innerHeight-20+"px";
 	document.getElementById("gamePane").style.width = window.innerWidth-20+"px";
 	document.getElementById("gamePane").innerHTML = marker.data.html;
+	viewer.navbar.hide()
+	viewer.plugins.markers.hide()
   }
  	
 });
@@ -152,6 +154,8 @@ markersPlugin.on('select-marker', (e, marker) => {
    function closeGamePane() {
       document.getElementById("gamePane").style.visibility="hidden";
       document.getElementById("closer2").style.visibility="hidden";
+      viewer.navbar.show();
+      viewer.plugins.markers.show()
    }
 viewer.enterFullscreen = function() {myFullscreen()};
 
