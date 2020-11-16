@@ -14,6 +14,16 @@ var markers = [{
     scale: [1,2],
 	data: {type: '3Droom', room: 'science1', id:'S3.32', x:0, y:0}
   },
+  {
+    id: 'HazardsActivity',
+    y: 1342,
+    x: 5360,
+    width: 32,
+    height: 32,
+    tooltip: 'Hazards Activity',
+    scale: [1,2],
+    html: "<iframe src="../Games/matchinggame.html></iframe>",
+  },
   ];
 
 function getData() {
