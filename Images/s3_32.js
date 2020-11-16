@@ -35,7 +35,7 @@ function getData(tourID) {
   	  return {markers:markers[tourID], data:data};
 	}
 	else {
-	  return {markers:markers.default.concat.markers[tourID], data:data};
+	  return {markers:markers.default.concat(markers[tourID]), data:data};
 	}
 }
 
