@@ -24,7 +24,7 @@ var markers = {
 	    height: 32,
 	    tooltip: 'Hazards Activity',
 	    scale: [1,2],
-	    data: {type: 'gameFrame', html: '<iframe style="width:100%; height:100%" frameBorder="0" id="gameFrame" src="../Games/matchinggame.html">Your browser is not compatible!</iframe>'}
+	    data: {type: 'gameFrame', html: '<iframe style="width:100%; height:100%" frameBorder="0" id="gameFrame" src="./Games/matchinggame.html">Your browser is not compatible!</iframe>'}
 	  },],
    }
 
