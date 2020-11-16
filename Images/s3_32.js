@@ -23,7 +23,7 @@ var markers = [{
     height: 32,
     tooltip: 'Hazards Activity',
     scale: [1,2],
-
+    html: 'Hi<br>hi',
     data: {type: 'gameFrame'}
   },
   ];
