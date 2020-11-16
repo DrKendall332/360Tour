@@ -23,7 +23,7 @@ var markers = [{
     height: 32,
     tooltip: 'Go down to Reception / Library',
     scale: [1,2],
-	data: {type: '3Droom', room: 'S2_reception', id:'S3 Stairs', x:0, y:0}
+	data: {type: '3Droom', room: 's2_reception', id:'S3 Stairs', x:0, y:0}
   },
   ];
 
