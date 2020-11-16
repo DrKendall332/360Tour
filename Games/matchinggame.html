@@ -20,8 +20,8 @@
 
 	function initPuzzle() {
 
-		var h = (document.documentElement.clientHeight-40)/7;
-		var w = document.documentElement.clientWidth/2;
+		var h = (window.innerHeight-80)/7;
+		var w = window.innerWidth/2;
 		var imgSqDimension  = Math.floor(Math.min(h,w));
 
 		shuffle(order);
