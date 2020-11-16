@@ -139,7 +139,7 @@ markersPlugin.on('select-marker', (e, marker) => {
 	window.location.href = marker.data.url;
   }
   if (marker.data.type=="gameFrame") {
-	document.getElementById("gamePane").style.visible=true;
+	document.getElementById("gamePane").style.visibility="visible";
   }
  	
 });
