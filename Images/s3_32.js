@@ -36,7 +36,7 @@ function getData(tourID) {
 }
 
 function runMarkerUpdate(tourID) {
-	if {exclude[tourID]) {
+	if (exclude[tourID]) {
 	  markersPlugin.setMarkers(markers[tourID]);
 	}
 	else {
