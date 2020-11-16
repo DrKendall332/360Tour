@@ -21,7 +21,7 @@
 	function initPuzzle() {
 
 		var usedH = document.getElementById("header").offsetHeight + document.getElementById("gameBoard").offsetHeight + document.getElementById("mark").offsetHeight;
-		var h = (window.innerHeight-20-usedH)/7;
+		var h = (window.innerHeight-usedH)/7;
 		var w = window.innerWidth/2;
 		var imgSqDimension  = Math.floor(Math.min(h,w));
 
