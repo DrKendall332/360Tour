@@ -18,12 +18,12 @@ var markers = [{
     id: 'HazardsActivity',
     y: 1342,
     x: 5360,
-    image: 'assets/forward_arrow.png',
+    image: 'assets/think.png',
     width: 32,
     height: 32,
     tooltip: 'Hazards Activity',
     scale: [1,2],
-    content: '<iframe style="width:100%; height:100%" id="gameFrame" src="../Games/matchinggame.html"></iframe>',
+    content: '<iframe style="width:1000px; height:99%" id="gameFrame" src="../Games/matchinggame.html"></iframe>',
     data: {type: 'gameFrame'}
   },
   ];
