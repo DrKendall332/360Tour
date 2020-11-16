@@ -23,7 +23,7 @@ var markers = [{
     height: 32,
     tooltip: 'Hazards Activity',
     scale: [1,2],
-    content: '<iframe style="width:1000px; height:99%" id="gameFrame" src="../Games/matchinggame.html"></iframe>',
+    content: '<iframe style="width:95%; height:95%" id="gameFrame" src="../Games/matchinggame.html"></iframe>',
     data: {type: 'gameFrame'}
   },
   ];
