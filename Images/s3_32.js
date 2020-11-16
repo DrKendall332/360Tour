@@ -29,7 +29,7 @@ var markers = {
 	  },],
    }
 
-var exclude = {transition:true};
+var exclude = {};
 
 function getData(tourID) {
   return {markers:markers[tourID], data:data};
