@@ -31,7 +31,12 @@ var markers = {
 var exclude = {};
 
 function getData(tourID) {
-  return {markers:markers[tourID], data:data};
+	if (exclude[tourID]) {
+  	  return {markers:markers[tourID], data:data};
+	}
+	else {
+	  return {markers:markers.default.concat.markers[tourID], data:data};
+	}
 }
 
 function runMarkerUpdate(tourID) {
