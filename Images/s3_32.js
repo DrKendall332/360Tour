@@ -28,7 +28,7 @@ var markers = {
 	  },{
 	    id: 'MrsShanks',
 	    y: 1355,
-	    x: 772,
+	    x: 0,
 	    image: 'assets/think.png',
 	    width: 32,
 	    height: 32,
