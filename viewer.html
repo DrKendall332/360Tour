@@ -115,7 +115,7 @@
       hideVideo3D();
     });
 	  
-	player.on('ended', function() {
+	player.on('play', function() {
 	  	 var sData = getData(tourID);
 	 	 var halfwidth = (sData.data.height || defaultCameraHeight);
 	  	 var coordtoangle = Math.PI*(y - halfwidth/2) / halfwidth;
