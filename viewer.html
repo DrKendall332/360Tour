@@ -113,10 +113,10 @@
 
 	  var halfwidth = (sData.data.height || defaultCameraHeight);
 	  var coordtoangle = Math.PI*(y - halfwidth/2) / halfwidth;
-	  player.vr().scene.rotateY(Math.PI);
+	  player.vr().scene.rotateX(coordtoangle);
 	  
 	  coordtoangle = Math.PI*(x - halfwidth) / halfwidth;
-	  player.vr().scene.rotateY(Math.PI);
+	  player.vr().scene.rotateY(coordtoangle);
 	  
 
 	  
