@@ -29,7 +29,7 @@ var markers = {
 	    id: 'MrsShanks',
 	    y: 1355,
 	    x: 0,
-	    image: 'assets/think.png',
+	    image: 'assets/speech.png',
 	    width: 32,
 	    height: 32,
 	    tooltip: 'Introduction with Mrs Shanks',
