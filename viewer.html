@@ -114,12 +114,15 @@
     player.on('ended', function() {
       hideVideo3D();
     });
-	  
+	player.IDK = true;  
 	player.on('loadeddata', function() {
+		if (player.IDK) {
 	  	 var sData = getData(tourID);
 	 	 var halfwidth = (sData.data.height || defaultCameraHeight);
 	  	 var coordtoangle = Math.PI*(x - halfwidth) / halfwidth;
 	  	 player.vr().scene.rotateY(coordtoangle);
+			player.IDK = false;
+		}
 	  });
 	  
 
