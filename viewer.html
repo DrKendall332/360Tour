@@ -110,17 +110,6 @@
 	video.style.visibility = "visible";
         myPlayer.src({type: 'video/mp4', src: src});
         myPlayer.show();	
-
-	  var sData = getData(tourID);
-	  var halfwidth = (sData.data.height || defaultCameraHeight);
-	  var coordtoangle = Math.PI*(y - halfwidth/2) / halfwidth;
-	  player.vr().scene.rotateX(coordtoangle);
-	  
-	  coordtoangle = Math.PI*(x - halfwidth) / halfwidth;
-	  player.vr().scene.rotateY(coordtoangle);
-	  
-
-	  
 	  
     player.on('ended', function() {
       hideVideo3D();
@@ -131,8 +120,13 @@
 	myPlayer.vr().camera.rotateY(y);
 	myPlayer.vr().camera.lookAt(0,100,0);*/
 	myPlayer.play();
-	myPlayer.vr().camera.rotation.x = 1000;
-	myPlayer.vr().camera.rotation.y = y;
+	  var sData = getData(tourID);
+	  var halfwidth = (sData.data.height || defaultCameraHeight);
+	  var coordtoangle = Math.PI*(y - halfwidth/2) / halfwidth;
+	  player.vr().scene.rotateX(coordtoangle);
+	  
+	  coordtoangle = Math.PI*(x - halfwidth) / halfwidth;
+	  player.vr().scene.rotateY(coordtoangle);
 
   }
 
