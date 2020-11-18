@@ -25,6 +25,16 @@ var markers = {
 	    tooltip: 'Hazards Activity',
 	    scale: [1,2],
 	    data: {type: 'gameFrame', html: '<iframe style="width:100%; height:100%" frameBorder="0" id="gameFrame" src="./Games/matchinggame.html">Your browser is not compatible!</iframe>'}
+	  },{
+	    id: 'MrsShanks',
+	    y: 1355,
+	    x: 772,
+	    image: 'assets/think.png',
+	    width: 32,
+	    height: 32,
+	    tooltip: 'Introduction with Mrs Shanks',
+	    scale: [1,2],
+	    data: {type: '3Dvideo', src:'Video/S3_32b.mp4'}
 	  },],
    }
 
