@@ -108,10 +108,20 @@
 	var myPlayer = videojs('videojs-vr-player');
 
 	video.style.visibility = "visible";
-    myPlayer.src({type: 'video/mp4', src: src});
-    myPlayer.show();	
+        myPlayer.src({type: 'video/mp4', src: src});
+        myPlayer.show();	
 
-	player.on('ended', function() {
+	  var halfwidth = (sData.data.height || defaultCameraHeight);
+	  var coordtoangle = Math.PI*(y - halfwidth/2) / halfwidth;
+	  player.vr().scene.rotateY(Math.PI);
+	  
+	  coordtoangle = Math.PI*(x - halfwidth) / halfwidth;
+	  player.vr().scene.rotateY(Math.PI);
+	  
+
+	  
+	  
+    player.on('ended', function() {
       hideVideo3D();
     });
 
