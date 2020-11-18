@@ -114,19 +114,22 @@
     player.on('ended', function() {
       hideVideo3D();
     });
-
+	  
+	player.on('ended', function() {
+	  	 var sData = getData(tourID);
+	 	 var halfwidth = (sData.data.height || defaultCameraHeight);
+	  	 var coordtoangle = Math.PI*(y - halfwidth/2) / halfwidth;
+	  	 player.vr().scene.rotateX(coordtoangle);
+	  
+	  	 coordtoangle = Math.PI*(x - halfwidth) / halfwidth;
+	  	 player.vr().scene.rotateY(coordtoangle);
+	  });
+	  
 
 	/*myPlayer.vr().camera.rotateX(x);
 	myPlayer.vr().camera.rotateY(y);
 	myPlayer.vr().camera.lookAt(0,100,0);*/
-	myPlayer.play();
-	  var sData = getData(tourID);
-	  var halfwidth = (sData.data.height || defaultCameraHeight);
-	  var coordtoangle = Math.PI*(y - halfwidth/2) / halfwidth;
-	  player.vr().scene.rotateX(coordtoangle);
-	  
-	  coordtoangle = Math.PI*(x - halfwidth) / halfwidth;
-	  player.vr().scene.rotateY(coordtoangle);
+	myPlayer.play()
 
   }
 
