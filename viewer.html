@@ -111,6 +111,7 @@
         myPlayer.src({type: 'video/mp4', src: src});
         myPlayer.show();	
 
+	  var sData = getData(tourID);
 	  var halfwidth = (sData.data.height || defaultCameraHeight);
 	  var coordtoangle = Math.PI*(y - halfwidth/2) / halfwidth;
 	  player.vr().scene.rotateX(coordtoangle);
