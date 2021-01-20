@@ -35,8 +35,7 @@ var markers = [{
     height: 32,
     tooltip: 'Mrs Stevenson',
 	content: '<iframe width="560" height="315" src="https://www.youtube.com/embed/yFkSPfGYNQg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
-    scale: [1,2],
-	data: {type: 'Info'}
+    scale: [1,2]
   },
 	       
   {
