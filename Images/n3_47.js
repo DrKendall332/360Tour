@@ -21,7 +21,7 @@ var markers = [{
     image: 'assets/speech.png',
     width: 32,
     height: 32,
-    tooltip: 'Mrs McGillivray',
+    tooltip: 'RMPS Introduction',
     scale: [1,2],
     data: {type: 'gameFrame', html: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/EY02qFRrV-k" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'}
   },
