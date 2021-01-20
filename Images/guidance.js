@@ -36,7 +36,7 @@ var markers = [{
     tooltip: 'Mrs Stevenson',
 	content: '<iframe width="560" height="315" src="https://www.youtube.com/embed/yFkSPfGYNQg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
     scale: [1,2],
-	date: {type: 'Youtube'}
+	data: {type: 'Youtube'}
   },
   {
     id: 'GVid2',
@@ -48,7 +48,7 @@ var markers = [{
     tooltip: 'Mrs Jamieson',
 	content: '<iframe width="560" height="315" src="https://www.youtube.com/embed/XyQ6fsubBj4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
     scale: [1,2],
-	date: {type: 'Youtube'}
+	data: {type: 'Youtube'}
   },	       
   {
     id: 'Offices2',
