@@ -49,6 +49,17 @@ var markers = [{
     scale: [1,2],
 	data: {type: 'Info'}
    },
+  {
+    id: 'PEVid',
+    y: 1279,
+    x: 1363,
+    image: 'assets/speech.png',
+    width: 32,
+    height: 32,
+    tooltip: 'PE Introduction',
+    scale: [1,2],
+    data: {type: 'gameFrame', html: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/EMIQAPdZEFc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'}
+  },
   ];
 
 function getData() {
