@@ -18,7 +18,7 @@ var markers = [{
     id: 'RMPSVid',
     y: 1434,
     x: 2501,
-    image: 'assets/forward_arrow.png',
+    image: 'assets/speech.png',
     width: 32,
     height: 32,
     tooltip: 'Mrs McGillivray',
