@@ -15,7 +15,7 @@ var markers = [{
 	data: {type: '3Droom', room: 'maths1', id:'N3.47', x:0, y:0}
   },
   {
-    id: 'Doorway',
+    id: 'RMPSVid',
     y: 1434,
     x: 2501,
     image: 'assets/forward_arrow.png',
