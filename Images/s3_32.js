@@ -14,8 +14,8 @@ var markers = {
 	    tooltip: 'To Science Corridor',
 	    scale: [1,2],
 	    data: {type: '3Droom', room: 'science1', id:'S3.32', x:0, y:0}
-  	},],
-	transition:[{
+  	},
+	{
 	    id: 'MrsShanks',
 	    y: 1355,
 	    x: 0,
@@ -25,7 +25,8 @@ var markers = {
 	    tooltip: 'Introduction with Mrs Shanks',
 	    scale: [1,2],
 	    data: {type: '3Dvideo', src:'Video/S3_32b.mp4'}
-	  },{
+	  },],
+	transition:[{
 	    id: 'HazardsActivity',
 	    y: 1355,
 	    x: 1072,
