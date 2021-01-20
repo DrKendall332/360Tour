@@ -16,8 +16,8 @@ var markers = [{
   },
   {
     id: 'RMPSVid',
-    y: 1434,
-    x: 2501,
+    y: 1496,
+    x: 4833,
     image: 'assets/speech.png',
     width: 32,
     height: 32,
