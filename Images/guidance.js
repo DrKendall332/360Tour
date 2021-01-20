@@ -41,7 +41,7 @@ var markers = [{
   {
     id: 'GVid2',
     y: 1250,
-    x: 2721,
+    x: 2821,
     image: 'assets/speech.png',
     width: 32,
     height: 32,
