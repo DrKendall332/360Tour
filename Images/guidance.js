@@ -26,18 +26,30 @@ var markers = [{
     scale: [1,2],
 	data: {type: 'Info'}
   },
-	  {
+  {
     id: 'GVid1',
     y: 1250,
     x: 2521,
-    image: 'assets/inspect.png',
+    image: 'assets/speech.png',
     width: 32,
     height: 32,
     tooltip: 'Mrs Stevenson',
 	content: '<iframe width="560" height="315" src="https://www.youtube.com/embed/yFkSPfGYNQg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
-    scale: [1,2]
+    scale: [1,2],
+	date: {type: 'Youtube'}
   },
-	       
+  {
+    id: 'GVid2',
+    y: 1250,
+    x: 2721,
+    image: 'assets/speech.png',
+    width: 32,
+    height: 32,
+    tooltip: 'Mrs Jamieson',
+	content: '<iframe width="560" height="315" src="https://www.youtube.com/embed/XyQ6fsubBj4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
+    scale: [1,2],
+	date: {type: 'Youtube'}
+  },	       
   {
     id: 'Offices2',
     y: 1250,
