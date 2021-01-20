@@ -34,9 +34,8 @@ var markers = [{
     width: 32,
     height: 32,
     tooltip: 'Mrs Stevenson',
-	content: '<iframe width="560" height="315" src="https://www.youtube.com/embed/yFkSPfGYNQg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
     scale: [1,2],
-	data: {type: 'Youtube'}
+    data: {type: 'gameFrame', html: '<iframe width="90%" height="90%" src="https://www.youtube.com/embed/yFkSPfGYNQg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'}
   },
   {
     id: 'GVid2',
@@ -46,9 +45,8 @@ var markers = [{
     width: 32,
     height: 32,
     tooltip: 'Mrs Jamieson',
-	content: '<iframe width="560" height="315" src="https://www.youtube.com/embed/XyQ6fsubBj4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
     scale: [1,2],
-	data: {type: 'Youtube'}
+    data: {type: 'gameFrame', html: '<iframe width="90%" height="90%" src="https://www.youtube.com/embed/XyQ6fsubBj4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'}
   },	       
   {
     id: 'Offices2',
