@@ -35,7 +35,7 @@ var markers = [{
     height: 32,
     tooltip: 'Mrs Stevenson',
     scale: [1,2],
-    data: {type: 'gameFrame', html: '<center><iframe width="90%" height="90%" src="https://www.youtube.com/embed/yFkSPfGYNQg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>'}
+    data: {type: 'gameFrame', html: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/yFkSPfGYNQg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'}
   },
   {
     id: 'GVid2',
