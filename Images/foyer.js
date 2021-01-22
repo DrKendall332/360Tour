@@ -35,7 +35,7 @@ var markers = [
     height: 32,
     tooltip: 'Jump to Guidance!',
     scale: [1,2],
-	data: {type: '3Droom', room: 'guidance', x:2471, y:1250}
+	data: {type: '3Droom', room: 'guidance', x:2671, y:1250}
   },
   {
     id: 'ScienceJump',
