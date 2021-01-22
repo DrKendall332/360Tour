@@ -47,7 +47,18 @@ var markers = [{
     tooltip: 'Mrs Jamieson',
     scale: [1,2],
     data: {type: 'gameFrame', html: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/XyQ6fsubBj4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'}
-  },	       
+  },
+  {
+    id: 'GVid3',
+    y: 1550,
+    x: 2521,
+    image: 'assets/speech.png',
+    width: 32,
+    height: 32,
+    tooltip: 'Mrs Dunn',
+    scale: [1,2],
+    data: {type: 'gameFrame', html: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/6ZJnwUCdyJM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'}
+  },
   {
     id: 'Offices2',
     y: 1250,
