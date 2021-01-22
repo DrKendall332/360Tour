@@ -126,6 +126,17 @@ var markers = [
     scale: [1,2],
 	data: {type: '3Droom', room: 'pe2', x:1363, y:1279}
   },
+  {
+    id: 'MusicJump',
+    y: 1370,
+    x: 2700,
+    image: 'assets/forward_arrow.png',
+    width: 32,
+    height: 32,
+    tooltip: 'Jump to Music!',
+    scale: [1,2],
+	data: {type: '3Droom', room: 'n1_07', x:465 y:1270}
+  },
   ];
 
 function getData() {
