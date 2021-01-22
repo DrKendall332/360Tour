@@ -135,7 +135,7 @@ var markers = [
     height: 32,
     tooltip: 'Jump to Music!',
     scale: [1,2],
-	data: {type: '3Droom', room: 'n1_07', x:465 y:1270}
+	data: {type: '3Droom', room: 'n1_07', x:465, y:1270}
   },
   ];
 
