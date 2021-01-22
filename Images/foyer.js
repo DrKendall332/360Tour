@@ -28,14 +28,14 @@ var markers = [
   },
   {
     id: 'MarkerCallOut',
-    y:1406,
+    y:1416,
     x:2380,
     html: '<b>Quick Jump to departments:</b>',
     data: {type: 'html'}
   },
   {
     id: 'GuidanceJump',
-    y: 1443,
+    y: 1463,
     x: 2380,
     image: 'assets/jump.png',
     width: 32,
