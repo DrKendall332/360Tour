@@ -101,6 +101,17 @@ var markers = [
 	data: {type: '3Droom', room: 'n2_18', x:4865, y:1524}
   },
   {
+    id: 'SocialJump',
+    y: 1370,
+    x: 2540,
+    image: 'assets/jump.png',
+    width: 32,
+    height: 32,
+    tooltip: 'Jump to English!',
+    scale: [1,2],
+	data: {type: '3Droom', room: 'soccorridor', x:8, y:1273}
+  },
+  {
     id: 'HEJump',
     y: 1370,
     x: 2860,
