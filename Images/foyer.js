@@ -107,7 +107,7 @@ var markers = [
     image: 'assets/jump.png',
     width: 32,
     height: 32,
-    tooltip: 'Jump to English!',
+    tooltip: 'Jump to Social Subjects!',
     scale: [1,2],
 	data: {type: '3Droom', room: 'soccorridor', x:8, y:1273}
   },
