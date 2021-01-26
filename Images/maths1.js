@@ -58,7 +58,7 @@ var markers = [{
     scale: [1,2],
 	data: {type: '3Droom', room: 'n3_48', id:'Doorway', x:0, y:0}
   },
-  {
+ /* {
     id: 'MathsVid',
     y: 1381,
     x: 2043,
@@ -68,7 +68,7 @@ var markers = [{
     tooltip: 'Maths Introduction',
     scale: [1,2],
     data: {type: 'gameFrame', html: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/z65u7bC7wUk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'}
-  },
+  },*/
   ];
 
 function getData() {
