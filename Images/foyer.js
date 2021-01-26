@@ -26,7 +26,7 @@ var markers = [
     scale: [1,2],
 	data: {type: 'url', url:'index.html'}
   },
-  {
+ /* {
     id: 'MarkerCallOut',
     y:1416,
     x:2380,
@@ -154,7 +154,7 @@ var markers = [
     tooltip: 'Jump to Music!',
     scale: [1,2],
 	data: {type: '3Droom', room: 'n1_07', x:465, y:1270}
-  },
+  },*/
   ];
 
 function getData() {
