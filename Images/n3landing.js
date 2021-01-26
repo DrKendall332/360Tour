@@ -36,7 +36,7 @@ var markers = [{
     scale: [1,2],
 	data: {type: '3Droom', room: 'sfl', id:'N3 Landing', x:0, y:0}
   },
-  {
+  /*{
     id: 'ASNVid',
     y: 1311,
     x: 120,
@@ -46,7 +46,7 @@ var markers = [{
     tooltip: 'Support for Learning Introduction',
     scale: [1,2],
     data: {type: 'gameFrame', html: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/eelRkQIJ-Sw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'}
-  },
+  },*/
   {
     id: 'ASN',
     y: 1461,
