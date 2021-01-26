@@ -14,7 +14,7 @@ var markers = [{
     scale: [1,2],
 	data: {type: '3Droom', room: 'maths1', id:'N3.47', x:0, y:0}
   },
-  {
+ /* {
     id: 'RMPSVid',
     y: 1496,
     x: 4833,
@@ -24,7 +24,7 @@ var markers = [{
     tooltip: 'RMPS Introduction',
     scale: [1,2],
     data: {type: 'gameFrame', html: '<iframe width="100%" height="100%" src="https://www.youtube.com/embed/EY02qFRrV-k" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'}
-  },
+  },*/
 	       
   ];
 
