@@ -18,18 +18,6 @@ var markers = {
 	    scale: [1,2],
 	    data: {type: '3Droom', room: 'n2_stair', id:'pupilEnt', x:0, y:0}
   	},
-	       {
-	    id: 'n2_stair',
-	    y: 1289,
-	    x: 4445,
-	    image: 'assets/forward_arrow.png',
-	    width: 32,
-	    height: 32,
-	    tooltip: 'To North Block Level 2',
-	    scale: [1,2],
-	    data: {type: '3Droom', room: 'n2_stair', id:'pupilEnt', x:0, y:0}
-  	},
-
 	],
    }
 
