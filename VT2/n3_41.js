@@ -10,7 +10,7 @@ var markers = {
 	default:[{
 	    id: 'sflC',
 	    y: 1333,
-	    x: 5376,
+	    x: 3421,
 	    image: 'assets/forward_arrow.png',
 	    width: 32,
 	    height: 32,
