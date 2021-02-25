@@ -9,7 +9,7 @@ var data = {
 var markers = {
 	default:[{
 	    id: 'n2_stair',
-	    y: 2688,
+	    y: 1315,
 	    x: 4278,
 	    image: 'assets/forward_arrow.png',
 	    width: 32,
