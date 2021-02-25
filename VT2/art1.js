@@ -36,7 +36,7 @@ var markers = {
 	    image: 'assets/forward_arrow.png',
 	    width: 32,
 	    height: 32,
-	    tooltip: 'N1.11',
+	    tooltip: 'N1.11 and N1.12',
 	    scale: [1,2],
 	    data: {type: '3Droom', room: 'n1_11', id:'art1', x:0, y:0}
   	},
