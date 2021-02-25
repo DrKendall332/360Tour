@@ -16,7 +16,7 @@ var markers = {
 	    height: 32,
 	    tooltip: 'Exit to Art Corridor ',
 	    scale: [1,2],
-	    data: {type: '3Droom', room: 'art1', id:'n1_12', x:0, y:0}
+	    data: {type: '3Droom', room: 'art1', id:'n1_11', x:0, y:0}
   	},
 	       {
 	    id: 'n1_11',
