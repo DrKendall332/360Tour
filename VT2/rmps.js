@@ -21,11 +21,11 @@ var markers = {
 	       {
 	    id: 'maths1',
 	    y: 1401,
-	    x: 2692,
+	    x: 5,
 	    image: 'assets/forward_arrow.png',
 	    width: 32,
 	    height: 32,
-	    tooltip: 'To Languages Corridor',
+	    tooltip: 'To Maths Corridor',
 	    scale: [1,2],
 	    data: {type: '3Droom', room: 'maths1', id:'rmps', x:0, y:0}
   	},
