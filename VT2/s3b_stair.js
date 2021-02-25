@@ -36,7 +36,7 @@ var markers = {
 var exclude = {};
 
 function getData(tourID) {
-	if (tourID === "default") {
+	if (tourID === "default" || typeof markers[tourID] === 'undefined') {
 	  return {markers:markers.default, data:data};
 	}
 	else if (exclude[tourID]) {
@@ -48,7 +48,7 @@ function getData(tourID) {
 }
 
 function runMarkerUpdate(tourID) {
-	if (tourID === "default") {
+	if (tourID === "default" || typeof markers[tourID] === 'undefined') {
 		markersPlugin.setMarkers(markers.default);
 	}
 	else if (exclude[tourID]) {
