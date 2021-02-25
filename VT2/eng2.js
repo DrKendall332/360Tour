@@ -2,7 +2,7 @@ var data = {
 	width: 5376,
 	height: 2688,
 	tilt:-0.11,
-	roll:0.4,
+	roll:0.04,
 	pan:0
   };
   
