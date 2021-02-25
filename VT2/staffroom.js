@@ -9,17 +9,6 @@ var data = {
 var markers = {
 	default:[{
 	    id: 'SLT2',
-	    y: 1381,
-	    x: 1094,
-	    image: 'assets/forward_arrow.png',
-	    width: 32,
-	    height: 32,
-	    tooltip: 'Exit to SLT Corridor ',
-	    scale: [1,2],
-	    data: {type: '3Droom', room: 'SLT2', id:'staffroom', x:0, y:0}
-  	},
-	       {
-	    id: 'SLT2',
 	    y: 1368,
 	    x: 1101,
 	    image: 'assets/forward_arrow.png',
