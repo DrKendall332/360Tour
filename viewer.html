@@ -74,24 +74,37 @@
 	  script.onload = function () {
 	  
 	  	var sData = getData(tourID);
+		var roll;
+		var pan;
+		var tilt;
+		
 	    if (id != null) {
 		  var fMarker = sData.markers.find((mark) => {return mark.id == id});
 		  if (fMarker) {
 		    // turn 180deg on the x coord and invert the y coord.
   			x = ((fMarker.x + sData.data.height) % sData.data.width);
 			y = sData.data.height /2 //- fMarker.y;
+			roll = sData.data.roll || 0;
+			pan = sData.data.pan || 0;
+			tilt = sData.data.tilt || 0;
 		  }
 		}
 		else if(sData) {
 		  if (x==null) { x=sData.data.height || defaultCameraHeight};
 		  if (y==null) { y=sData.data.height/2 || defaultCameraHeight/2};
+		  roll = sData.data.roll || 0;
+		  pan = sData.data.pan || 0;
+		  tilt = sData.data.tilt || 0;
 		}
 		else {
 		  if (x==null) { x=defaultCameraHeight};
 		  if (y==null) { y=defaultCameraHeight/2};
+		  roll = 0;
+		  pan = 0;
+		  tilt = 0;
 		}
 		
-	  	viewer.setPanorama(img, {x:x,y:y, transition:false} ).then(() => {
+	  	viewer.setPanorama(img, {x:x,y:y, transition:false, sphereCorrection:{roll:roll, pan:pan, tilt:tilt} } ).then(() => {
 	      runMarkerUpdate(tourID);
 		  viewer.zoom(0);
 	    });
