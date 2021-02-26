@@ -112,7 +112,8 @@
 	  script.src = path+room+'.js';
 	  document.head.appendChild(script);
   }
-  
+  document.getElementById("viewer").innerHTML = "";
+	
   function play3DVideo(src, x, y) {
 	var viewerC = document.getElementById('viewer');
 	viewerC.style.visibility = "hidden";
