@@ -18,7 +18,7 @@
 <script src="JS/3D Viewer/dist/plugins/markers.js"></script>
 <link rel="stylesheet" href="JS/3D Viewer/dist/plugins/markers.css"/>
 
-<center><div id="viewer" style="left:0; top:0; position:absolute"></div></center>
+<center><div id="viewer" style="left:0; top:0; position:absolute">This page does not support Internet Explorer. Please use a modern web-browser, like Firefox, Chrome or Edge.</div></center>
 <style>
   /* the viewer container must have a defined size */
   #viewer {
@@ -79,14 +79,7 @@
 		var tilt;
 		
 	    if (id != null) {
-		  //var fMarker = sData.markers.find((mark) => {return mark.id == id});
-		  var fMarker;
-		    for (var i=0; i< sData.markers.length; i++) {
-			    if (sData.markers[i].id === id) {
-				    fMarker = sData.markers[i];
-				    break;
-			    }
-		    }
+		  var fMarker = sData.markers.find((mark) => {return mark.id == id});
 		  if (fMarker) {
 		    // turn 180deg on the x coord and invert the y coord.
   			x = ((fMarker.x + sData.data.height) % sData.data.width);
