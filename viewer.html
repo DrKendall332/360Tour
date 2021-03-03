@@ -43,11 +43,8 @@
 	
 	
  if (useRadar) {
-	 alert("radar");
 	var script = document.createElement('script');
 	script.onload = function () {
-		alert("loaded");
-		draw();
 	}
 	script.src = './radar.js';
 	document.body.appendChild(script);
