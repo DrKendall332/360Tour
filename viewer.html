@@ -37,8 +37,20 @@
   const tourID = urlParams.get('tourID') || 'default';
   const defaultCameraWidth = 5376;
   const defaultCameraHeight = 2688;
-
+  const useRadar = urlParams.get('radar') || false;
+	
   document.getElementById("viewer").innerHTML = "";
+	
+	
+ if (useRadar) {
+	 alert("radar");
+	var script = document.createElement('script');
+	script.onload = function () {
+		
+	}
+	script.src = './radar.js';
+ }
+	
   var viewer = new PhotoSphereViewer.Viewer({
     plugins: [
       [PhotoSphereViewer.MarkersPlugin, {
