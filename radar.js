@@ -1,13 +1,13 @@
 
 			var canvas = document.createElement("CANVAS");
-			canvas.style = "position:absolute; top:10; left:10; width:270; height:225";
+			canvas.style = "position:absolute; top:10; left:10; width:270; height:225; z-index:100";
 			canvas.height=900;
 			canvas.width=1080;
 			canvas.id = "radar";
 			document.body.appendChild(canvas);
 		
 			var cArrow = document.createElement("CANVAS");
-			cArrow.style = "position:absolute; top:10; left:10; width:270; height:225";
+			cArrow.style = "position:absolute; top:10; left:10; width:270; height:225; z-index:100";
 			cArrow.height=900;
 			cArrow.width=1080;
 			cArrow.id = "radarArrow";
