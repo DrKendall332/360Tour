@@ -152,19 +152,19 @@
 				if (currentF===0) {
 				draw(currentF);}
 			};
-			image1.src = "./Assets/f1.png";
+			image1.src = "./assets/f1.png";
 			var image2 = new Image();
 			image2.onload = function() {
 				if (currentF===1) {
 				draw(currentF);}
 			};
-			image2.src = "./Assets/f2.png";
+			image2.src = "./assets/f2.png";
 			var image3 = new Image();
 			image3.onload = function() {
 				if (currentF===2) {
 				draw(currentF);}
 			};
-			image3.src = "./Assets/f3.png";
+			image3.src = "./assets/f3.png";
 		
 			function dot(item, floor) {
 				var cRoom = current;
