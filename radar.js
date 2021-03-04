@@ -273,12 +273,12 @@
 			
 			function drawArrow() {
 				var item = nodes[currentI];
+				var ctxA = cArrow.getContext("2d");
 				if (item.f !== currentF) {
 					ctxA.clearRect(0, 0, cArrow.width, cArrow.height);
 					return;
 				}
 				var angle = viewer.prop.position.longitude;
-				var ctxA = cArrow.getContext("2d");
 				ctxA.clearRect(0, 0, cArrow.width, cArrow.height);
 				
 				var theta = angle + Math.PI*(item.z)/180
