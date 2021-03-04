@@ -268,7 +268,7 @@
 				ctx.lineTo(1070,890);
 				ctx.stroke();
 				
-				if (parseInt(.style.width) !==1080) {
+				if (parseInt(canvas.style.opacity) !=="1") {
 					ctx.moveTo(1074,890);
 					ctx.lineTo(980,890);
 					ctx.stroke();
@@ -346,8 +346,8 @@
 					}
 					e.target.style.height = (H/nScale) + "px";
 					e.target.style.width = (W/nScale) + "px";
-					radar.style.height = (H/nScale) + "px";
-					radar.style.width = (W/nScale) + "px";
+					canvas.style.height = (H/nScale) + "px";
+					canvas.style.width = (W/nScale) + "px";
 					drawOverlay(currentF);
 				}
 				else if (scale*X>10 && scale*Y>10 && scale*X<189 && scale*Y<60) {
