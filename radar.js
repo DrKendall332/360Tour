@@ -23,7 +23,7 @@
 {id:'s1_03',x:79,y:327,f:0,z:155},
 {id:'canteen',x:284,y:514,f:0,z:245},
 {id:'dining',x:319,y:489,f:0,z:0},
-{id:'coffeeBar',x:435,y:491,f:0,z:13},
+{id:'coffeeBar',x:435,y:491,f:0,z:12},
 {id:'n1_stair',x:518,y:425,f:0,z:0},
 {id:'n1C',x:537,y:462,f:0,z:345},
 {id:'n1_confRoom',x:565,y:480,f:0,z:180},
@@ -150,20 +150,20 @@
 			
 			var image1 = new Image();
 			image1.onload = function() {
-				if (currentF===0) {
-				draw(currentF);}
+				//if (currentF===0) {
+				//draw(currentF);}
 			};
 			image1.src = "./assets/f1.png";
 			var image2 = new Image();
 			image2.onload = function() {
-				if (currentF===1) {
-				draw(currentF);}
+				//if (currentF===1) {
+				//draw(currentF);}
 			};
 			image2.src = "./assets/f2.png";
 			var image3 = new Image();
 			image3.onload = function() {
-				if (currentF===2) {
-				draw(currentF);}
+				//if (currentF===2) {
+				//draw(currentF);}
 			};
 			image3.src = "./assets/f3.png";
 			
