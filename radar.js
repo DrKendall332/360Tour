@@ -182,13 +182,17 @@
 					
 					if (item.id === current) {			
 						ctx.fillStyle = "#FF0000";
+						ctx.beginPath();
+						ctx.arc(item.x, item.y, radius, 0, 2 * Math.PI)
+						ctx.fill();
 					}
 					else {
 						ctx.fillStyle = "#0000FF";
+						ctx.beginPath();
+						ctx.lineWidth="2";
+						ctx.arc(item.x, item.y, radius, 0, 2 * Math.PI)
+						ctx.stroke();
 					}
-					ctx.beginPath();
-					ctx.arc(item.x, item.y, radius, 0, 2 * Math.PI)
-					//ctx.fill();
 				}
 			}
 			
