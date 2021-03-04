@@ -349,7 +349,7 @@
 						var n = nodes[i];
 						var sx = scale*X - n.x;
 						var sy = scale*Y - n.y;
-						var r = (sy^2 + sx^2)^0.5;
+						var r = (sy**2 + sx**2)**0.5;
 						
 						if (n.f === currentF && r<10 ) {
 							alert("Clicked "+n.id+" "+r);
