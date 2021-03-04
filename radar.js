@@ -1,13 +1,13 @@
 
 			var canvas = document.createElement("CANVAS");
-			canvas.style.cssText = "position:absolute; top:10; left:10; width:270; height:225; z-index:100";
+			canvas.style.cssText = "position:absolute; top:10px; left:10px; width:270px; height:225px; z-index:100";
 			canvas.height=900;
 			canvas.width=1080;
 			canvas.id = "radar";
 			document.body.appendChild(canvas);
 		
 			var cArrow = document.createElement("CANVAS");
-			cArrow.style.cssText = "position:absolute; top:10; left:10; width:270; height:225; z-index:101";
+			cArrow.style.cssText = "position:absolute; top:10px; left:10px; width:270px; height:225px; z-index:101";
 			cArrow.height=900;
 			cArrow.width=1080;
 			cArrow.id = "radarArrow";
@@ -250,7 +250,6 @@
 			}
 			
 			function radarClick(e) {
-				alert("click works");
 				if (e.layerX > parseInt(e.target.style.width)*0.83 && e.layerY > parseInt(e.target.style.height)*0.83) {
 					if (parseInt(e.target.style.height)===900) {
 						e.target.style.height = "225px";
