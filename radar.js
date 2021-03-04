@@ -219,7 +219,7 @@
 				ctx.rect(900,750,179,149);
 				ctx.stroke();
 				
-				ctx.clearRect(10, 10, 179, 75);
+				ctx.clearRect(10, 10, 179, 50);
 				ctx.fillStyle = "#FFFFFF";
 				ctx.fillRect(10,10,179,75);
 				ctx.stroke();
@@ -233,7 +233,7 @@
 					ctx.strokeText("Floor 3", 15, 75); 
 				}
 				
-				ctx.clearRect(10, 95, 179, 75);
+				ctx.clearRect(10, 70, 179, 50);
 				ctx.fillStyle = "#FFFFFF";
 				ctx.fillRect(10,95,179,75);
 				ctx.stroke();
@@ -249,7 +249,7 @@
 				
 				ctx.clearRect(10, 180, 179, 75);
 				ctx.fillStyle = "#FFFFFF";
-				ctx.fillRect(10,180,179,75);
+				ctx.fillRect(10,130,179,50);
 				ctx.stroke();
 				ctx.rect(10,180,179,75);
 				ctx.stroke();
@@ -349,15 +349,15 @@
 					radar.style.width = (W/nScale) + "px";
 					drawOverlay(currentF);
 				}
-				else if (scale*X>10 && scale*Y>10 && scale*X<189 && scale*Y<85) {
+				else if (scale*X>10 && scale*Y>10 && scale*X<189 && scale*Y<60) {
 					currentF = 2;
 					draw(2);
 				}
-				else if (scale*X>10 && scale*Y>95 && scale*X<189 && scale*Y<170) {
+				else if (scale*X>10 && scale*Y>70 && scale*X<189 && scale*Y<120) {
 					currentF = 1;
 					draw(1);
 				}
-				else if (scale*X>10 && scale*Y>180 && scale*X<189 && scale*Y<255) {
+				else if (scale*X>10 && scale*Y>130 && scale*X<189 && scale*Y<180) {
 					currentF = 0;
 					draw(0);
 				}
