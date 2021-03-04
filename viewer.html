@@ -47,8 +47,7 @@
 	script.onload = function () {
 		loaded = true;
 		current = defaultRoom;
-		currentF, currentI = floorFromRoom(current);
-		alert(currentF);
+		currentF, currentI = floorFromRoom(defaultRoom);
 		draw(currentF);
 	}
 	script.src = './radar.js';
@@ -207,7 +206,7 @@ if (useRadar) {
 	});
 }
 	
-if (useRadar) {
+if (useRadar && loaded) {
 	currentF, currentI = floorFromRoom(defaultRoom);
 }
 loadNewRoom(defaultRoom, null, null);
