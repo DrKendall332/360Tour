@@ -31,7 +31,7 @@ var markers = {
   	},
 	{
 	    id: 'MrsLogue',
-	    y: 1205,
+	    y: 1165,
 	    x: 3538,
 	    image: 'assets/inspect.png',
 	    width: 32,
