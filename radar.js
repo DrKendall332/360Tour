@@ -14,6 +14,7 @@
 			document.body.appendChild(cArrow);
 			
 			var nodes =[
+{id:'foyer',x:339,y:584,f:1,z:280},
 {id:'tech1',x:205,y:392,f:0,z:335},
 {id:'tech2',x:179,y:335,f:0,z:335},
 {id:'tech3',x:132,y:317,f:0,z:245},
@@ -108,7 +109,6 @@
 {id:'n2_24',x:560,y:124,f:1,z:180},
 {id:'SLT1',x:153,y:372,f:1,z:335},
 {id:'SLT2',x:136,y:334,f:1,z:335},
-{id:'foyer',x:339,y:584,f:1,z:280},
 {id:'reception_s6',x:235,y:518,f:1,z:155},
 {id:'pupilEnt',x:572,y:585,f:1,z:270},
 {id:'s6social1',x:199,y:461,f:1,z:335},
@@ -146,6 +146,7 @@
 ];
 			var currentF = 1;
 			var current = "foyer";
+			var currentI = 0;
 			
 			var image1 = new Image();
 			image1.onload = function() {
@@ -169,39 +170,17 @@
 			function floorFromRoom(room) {
 				for (var i=0; i<nodes.length; i++) {
 					if (nodes[i].id === room) {
-						return nodes[i].f;
+						return nodes[i].f, i;
 					}
 				}			
 			}
 
 			function dot(item, floor) {
-				var cRoom = current;
 				if (item.f === floor) {
 					var radius = 10;
 					var ctx = canvas.getContext("2d");
 					
-					if (item.id ===cRoom) {
-						var ctxA = cArrow.getContext("2d");
-						
-						var theta = Math.PI*(item.z)/180
-						var phi = Math.PI*(item.z+45)/180
-						var zi  = Math.PI*(item.z-45)/180
-						
-						var ax=item.x + 30*Math.sin(theta);
-						var ay=item.y - 30*Math.cos(theta);
-						var bx=item.x + 15*Math.sin(phi);
-						var by=item.y - 15*Math.cos(phi);
-						var cx=item.x + 15*Math.sin(zi);
-						var cy=item.y - 15*Math.cos(zi);
-						ctxA.fillStyle = "#FF0000";
-						ctxA.beginPath();
-						ctxA.moveTo(ax,ay);
-						ctxA.lineTo(bx,by);
-						ctxA.lineTo(cx,cy);
-						ctxA.lineTo(ax,ay);
-						ctxA.fill();
-						ctxA.closePath();
-												
+					if (item.id === current) {			
 						ctx.fillStyle = "#FF0000";
 					}
 					else {
@@ -224,14 +203,11 @@
 				for (var i=0; i<nodes.length; i++) {
 					dot(nodes[i], floor);
 				}
+				drawArrow();
 			}
 			
-			function drawOverlay(floor) {
-				if (floor !== currentF) {
-					return;
-				}
-				ctx = cArrow.getContext("2d");
-				ctx.clearRect(0, 0, cArrow.width, cArrow.height);
+			function drawOverlay(floor) {			
+				var ctx = canvas.getContext("2d");
 				ctx.beginPath();
 				ctx.lineWidth="4";
 				ctx.rect(900,750,179,149);
@@ -268,6 +244,35 @@
 				}
 			}
 			
+			function drawArrow() {
+				var item = nodes[currentI];
+				if (item.f !== currentF) {
+					return;
+				}
+				var angle = viewer.prop.position.longitude;
+				var ctxA = cArrow.getContext("2d");
+				ctxA.clearRect(0, 0, cArrow.width, cArrow.height);
+				
+				var theta = angle + Math.PI*(item.z)/180
+				var phi = angle + Math.PI*(item.z+45)/180
+				var zi  = angle + Math.PI*(item.z-45)/180
+						
+				var ax=item.x + 30*Math.sin(theta);
+				var ay=item.y - 30*Math.cos(theta);
+				var bx=item.x + 15*Math.sin(phi);
+				var by=item.y - 15*Math.cos(phi);
+				var cx=item.x + 15*Math.sin(zi);
+				var cy=item.y - 15*Math.cos(zi);
+				ctxA.fillStyle = "#FF0000";
+				ctxA.beginPath();
+				ctxA.moveTo(ax,ay);
+				ctxA.lineTo(bx,by);
+				ctxA.lineTo(cx,cy);
+				ctxA.lineTo(ax,ay);
+				ctxA.fill();
+				ctxA.closePath();
+			}
+
 			function radarClick(e) {
 				if (e.layerX > parseInt(e.target.style.width)*0.83 && e.layerY > parseInt(e.target.style.height)*0.83) {
 					if (parseInt(e.target.style.height)===900) {
