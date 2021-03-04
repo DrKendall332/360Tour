@@ -216,6 +216,7 @@
 				
 				ctx.clearRect(10, 10, 179, 75);
 				ctx.rect(10,10,179,75);
+				ctx.fillStyle = "#000000";
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===2) {
@@ -227,6 +228,7 @@
 				
 				ctx.clearRect(10, 95, 179, 75);
 				ctx.rect(10,95,179,75);
+				ctx.fillStyle = "#000000";
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===1) {
@@ -238,6 +240,7 @@
 				
 				ctx.clearRect(10, 180, 179, 75);
 				ctx.rect(10,180,179,75);
+				ctx.fillStyle = "#000000";
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===0) {
@@ -352,7 +355,7 @@
 						var r = (sy**2 + sx**2)**0.5;
 						
 						if (n.f === currentF && r<10 ) {
-							alert("Clicked "+n.id+" "+r);
+							loadNewRoom(n.id);
 						}
 					}
 				}
