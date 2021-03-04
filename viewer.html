@@ -47,11 +47,10 @@
 	script.onload = function () {
 		loaded = true;
 		current = defaultRoom;
-		var F;
-		F, currentI = floorFromRoom(defaultRoom);
-		alert(floorFromRoom(defaultRoom));
-		drawF(F);
-		currentF = F;
+		var FI = floorFromRoom(defaultRoom);
+		currentF = FI[0];
+		currentI = FI[1];
+		drawF(currentF);
 	}
 	script.src = './radar.js';
 	document.head.appendChild(script);
