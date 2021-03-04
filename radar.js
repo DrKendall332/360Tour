@@ -188,7 +188,7 @@
 					}
 					else {
 						ctx.fillStyle = "#0000FF";
-						context.strokeStyle = '#ff0000';
+						ctx.strokeStyle = '#ff0000';
 						ctx.beginPath();
 						ctx.lineWidth="2";
 						ctx.arc(item.x, item.y, radius, 0, 2 * Math.PI)
@@ -326,7 +326,7 @@
 				
 				var scale;
 				var nScale;
-				if (parseInt(e.target.style.opacity)===1) {
+				if (parseInt(radar.style.opacity)===1) {
 					scale = Math.max(W/a, H/b);
 					nScale = 4;
 				}
@@ -337,7 +337,7 @@
 					
 				
 				if (X > parseInt(e.target.style.width)*0.83 && Y > parseInt(e.target.style.height)*0.83) {
-					if (parseInt(e.target.style.opacity)===1) {
+					if (parseInt(radar.style.opacity)===1) {
 						radar.style.opacity = "0.5";
 					}
 					else {
