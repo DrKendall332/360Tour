@@ -208,24 +208,49 @@
 			
 			function drawOverlay(floor) {			
 				var ctx = canvas.getContext("2d");
-				ctx.clearRect(0, 0, cArrow.width, cArrow.height);
+				ctx.clearRect(900, 750, canvas.width, canvas.height);
 				ctx.beginPath();
 				ctx.lineWidth="4";
 				ctx.rect(900,750,179,149);
 				ctx.stroke();
 				
+				ctx.clearRect(10, 10, 179, 75);
 				ctx.rect(10,10,179,75);
 				ctx.stroke();
+				ctx.font = "30px Arial";
+				if (floor ===2) {
+					ctx.strokeText(" > Floor 3 <", 15, 15); 
+				}
+				else {
+					ctx.strokeText("Floor 3", 15, 15); 
+				}
+				
+				ctx.clearRect(10, 95, 179, 75);
 				ctx.rect(10,95,179,75);
 				ctx.stroke();
+				ctx.clearRect(10, 180, 179, 75);
 				ctx.rect(10,180,179,75);
 				ctx.stroke();
+				ctx.font = "30px Arial";
+				if (floor ===1) {
+					ctx.strokeText(" > Floor 2 <", 15, 15); 
+				}
+				else {
+					ctx.strokeText("Floor 2", 15, 100); 
+				}
 				
 				ctx.beginPath();
 				ctx.lineWidth="8";
 				ctx.moveTo(910,760);
 				ctx.lineTo(1070,890);
 				ctx.stroke();
+				ctx.font = "30px Arial";
+					if (floor ===0) {
+					ctx.strokeText(" > Floor 1 <", 15, 15); 
+				}
+				else {
+					ctx.strokeText("Floor 1", 15, 185); 
+				}
 				
 				if (parseInt(cArrow.style.width) !==1080) {
 					ctx.moveTo(1074,890);
@@ -275,7 +300,10 @@
 			}
 
 			function radarClick(e) {
-				if (e.layerX > parseInt(e.target.style.width)*0.83 && e.layerY > parseInt(e.target.style.height)*0.83) {
+				var X = e.layerX;
+				var Y = e.layerY;
+				
+				if (X > parseInt(e.target.style.width)*0.83 && Y > parseInt(e.target.style.height)*0.83) {
 					if (parseInt(e.target.style.height)===900) {
 						e.target.style.height = "225px";
 						e.target.style.width = "270px";
@@ -292,6 +320,18 @@
 						radar.style.opacity = "1";
 						drawOverlay(currentF);
 					}
+				}
+				else if (X>10 && Y>10 && X<189 &&Y<85) {
+					draw(0);
+				}
+				else if (X>10 && Y>95 && X<189 &&Y<170) {
+					draw(1);
+				}
+				else if (X>10 && Y>180 && X<189 &&Y<255) {
+					draw(2);
+				}
+				else {
+					
 				}
 				
 			}
