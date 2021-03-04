@@ -169,8 +169,7 @@
 			function floorFromRoom(room) {
 				for (var i=0; i<nodes.length; i++) {
 					if (nodes[i].id === room) {
-						currentF = nodes[i].f;
-						break;
+						return nodes[i].f;
 					}
 				}			
 			}
