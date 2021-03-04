@@ -42,7 +42,7 @@ var markers = {
   	},
 {	 
 	    id: 'MrAtkinson',
-	    y: 1199,
+	    y: 1190,
 	    x: 3536,
 	    image: 'assets/inspect.png',
 	    width: 32,
@@ -53,7 +53,7 @@ var markers = {
 	    data: {type: 'Info'}
   	},{	 
 	    id: 'MrChristie',
-	    y: 1091,
+	    y: 1131,
 	    x: 4409,
 	    image: 'assets/inspect.png',
 	    width: 32,
