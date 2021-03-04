@@ -144,26 +144,26 @@
 {id:'outsideN',x:621,y:10,f:0,z:180},
 {id:'outsideS',x:133,y:211,f:0,z:155},
 ];
-			var currentF = 1;
+			var currentF;
 			var current = "foyer";
 			var currentI = 0;
 			
 			var image1 = new Image();
 			image1.onload = function() {
-				//if (currentF===0) {
-				//draw(currentF);}
+				if (currentF===0) {
+				draw(currentF);}
 			};
 			image1.src = "./assets/f1.png";
 			var image2 = new Image();
 			image2.onload = function() {
-				//if (currentF===1) {
-				//draw(currentF);}
+				if (currentF===1) {
+				draw(currentF);}
 			};
 			image2.src = "./assets/f2.png";
 			var image3 = new Image();
 			image3.onload = function() {
-				//if (currentF===2) {
-				//draw(currentF);}
+				if (currentF===2) {
+				draw(currentF);}
 			};
 			image3.src = "./assets/f3.png";
 			
