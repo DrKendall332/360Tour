@@ -215,7 +215,7 @@
 				ctx.stroke();
 				
 				ctx.clearRect(10, 10, 179, 75);
-				ctx.fillStyle = "#000000";
+				ctx.fillStyle = "#FFFFFF";
 				ctx.fillRect(10,10,179,75);
 				ctx.stroke();
 				ctx.rect(10,10,179,75);
@@ -229,7 +229,7 @@
 				}
 				
 				ctx.clearRect(10, 95, 179, 75);
-				ctx.fillStyle = "#000000";
+				ctx.fillStyle = "#FFFFFF";
 				ctx.fillRect(10,95,179,75);
 				ctx.stroke();
 				ctx.rect(10,95,179,75);
@@ -243,7 +243,7 @@
 				}
 				
 				ctx.clearRect(10, 180, 179, 75);
-				ctx.fillStyle = "#000000";
+				ctx.fillStyle = "#FFFFFF";
 				ctx.fillRect(10,180,179,75);
 				ctx.stroke();
 				ctx.rect(10,180,179,75);
