@@ -188,6 +188,7 @@
 					}
 					else {
 						ctx.fillStyle = "#0000FF";
+						context.strokeStyle = '#ff0000';
 						ctx.beginPath();
 						ctx.lineWidth="2";
 						ctx.arc(item.x, item.y, radius, 0, 2 * Math.PI)
@@ -317,33 +318,36 @@
 			function radarClick(e) {
 				var X = e.layerX;
 				var Y = e.layerY;
+				const W = 1080;
+				const H = 900;
+				
+				var a = screen.availWidth;
+				var b = screen.availHeight;
 				
 				var scale;
-				if (parseInt(e.target.style.height)===900) {
-					scale = 1;
+				var nScale; = Math.max(W/a, H/b);;
+				if (parseInt(e.target.style.opacity)===1) {
+					scale = Math.max(W/a, H/b);
+					nScale = 4;
 				}
 				else {
 					scale = 4;
+					nScale = Math.max(W/a, H/b);
 				}
 					
 				
 				if (X > parseInt(e.target.style.width)*0.83 && Y > parseInt(e.target.style.height)*0.83) {
-					if (parseInt(e.target.style.height)===900) {
-						e.target.style.height = "225px";
-						e.target.style.width = "270px";
-						radar.style.height = "225px";
-						radar.style.width = "270px";
+					if (parseInt(e.target.style.opacity)===1) {
 						radar.style.opacity = "0.5";
-						drawOverlay(currentF);
 					}
 					else {
-						e.target.style.height = "900px";
-						e.target.style.width = "1080px";
-						radar.style.height = "900px";
-						radar.style.width = "1080px";
 						radar.style.opacity = "1";
-						drawOverlay(currentF);
 					}
+					e.target.style.height = (H/nScale) + "px";
+					e.target.style.width = (W/nScale) + "px";
+					radar.style.height = (H/nScale) + "px";
+					radar.style.width = (W/nScale) + "px";
+					drawOverlay(currentF);
 				}
 				else if (scale*X>10 && scale*Y>10 && scale*X<189 && scale*Y<85) {
 					currentF = 2;
