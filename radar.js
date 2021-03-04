@@ -170,7 +170,7 @@
 			function floorFromRoom(room) {
 				for (var i=0; i<nodes.length; i++) {
 					if (nodes[i].id === room) {
-						return nodes[i].f, i;
+						return [nodes[i].f, i];
 					}
 				}			
 			}
