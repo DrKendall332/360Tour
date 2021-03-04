@@ -1,6 +1,6 @@
 
 			var canvas = document.createElement("CANVAS");
-			canvas.style.cssText = "position:absolute; top:10px; left:10px; width:270px; height:225px; z-index:100";
+			canvas.style.cssText = "position:absolute; top:10px; left:10px; width:270px; height:225px; z-index:100; opacity:0.5";
 			canvas.height=900;
 			canvas.width=1080;
 			canvas.id = "radar";
@@ -236,6 +236,14 @@
 				ctx.lineWidth="4";
 				ctx.rect(900,750,179,149);
 				ctx.stroke();
+				
+				ctx.rect(10,10,179,75);
+				ctx.stroke();
+				ctx.rect(10,95,179,75);
+				ctx.stroke();
+				ctx.rect(10,180,179,75);
+				ctx.stroke();
+				
 				ctx.beginPath();
 				ctx.lineWidth="8";
 				ctx.moveTo(910,760);
@@ -267,6 +275,7 @@
 						e.target.style.width = "270px";
 						radar.style.height = "225px";
 						radar.style.width = "270px";
+						radar.style.opacity = "0.5";
 						drawOverlay(currentF);
 					}
 					else {
@@ -274,6 +283,7 @@
 						e.target.style.width = "1080px";
 						radar.style.height = "900px";
 						radar.style.width = "1080px";
+						radar.style.opacity = "1";
 						drawOverlay(currentF);
 					}
 				}
