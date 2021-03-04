@@ -29,6 +29,30 @@ var markers = {
 	    scale: [1,2],
 	    data: {type: '3Droom', room: 'staffroom', id:'SLT1', x:0, y:0}
   	},
+	{
+	    id: 'MrsLogue',
+	    y: 1205,
+	    x: 3538,
+	    image: 'assets/inspect.png',
+	    width: 32,
+	    height: 32,
+	    tooltip: 'Mrs Logue\'s Office',
+	    content: 'Mrs Logue\'s Office',
+	    scale: [1,2],
+	    data: {type: 'Info'}
+  	},
+        {	 
+	    id: 'MrMiddleton',
+	    y: 1118,
+	    x: 4302,
+	    image: 'assets/inspect.png',
+	    width: 32,
+	    height: 32,
+	    tooltip: 'Mr Middleton\'s Office',
+	    content: 'Mr Middleton\'s Office',
+	    scale: [1,2],
+	    data: {type: 'Info'}
+  	},
        {
 	    id: 's6social1',
 	    y: 1261,
