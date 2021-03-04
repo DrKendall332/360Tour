@@ -38,13 +38,16 @@
   const defaultCameraWidth = 5376;
   const defaultCameraHeight = 2688;
   const useRadar = urlParams.get('radar') || false;
-	
+  var loaded = false;
   document.getElementById("viewer").innerHTML = "";
 	
 	
  if (useRadar) {
 	var script = document.createElement('script');
 	script.onload = function () {
+		loaded = true;
+		current = defaultRoom;
+		currentF = floorFromRoom(current);
 	}
 	script.src = './radar.js';
 	document.body.appendChild(script);
@@ -84,7 +87,10 @@
 
 	  var script = document.createElement('script');
 	  script.onload = function () {
-	  
+	  	if (useRadar && loaded) {
+			current = room;
+			currentF = floorFromRoom(room);
+		}
 	  	var sData = getData(tourID);
 		var roll;
 		var pan;
