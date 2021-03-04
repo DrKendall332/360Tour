@@ -332,12 +332,15 @@
 					}
 				}
 				else if (scale*X>10 && scale*Y>10 && scale*X<189 && scale*Y<85) {
+					currentF = 0;
 					draw(0);
 				}
 				else if (scale*X>10 && scale*Y>95 && scale*X<189 && scale*Y<170) {
+					currentF = 1;
 					draw(1);
 				}
 				else if (scale*X>10 && scale*Y>180 && scale*X<189 && scale*Y<255) {
+					currentF = 2;
 					draw(2);
 				}
 				else {
