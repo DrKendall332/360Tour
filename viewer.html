@@ -92,7 +92,9 @@
 	  script.onload = function () {
 	  	if (useRadar && loaded) {
 			current = room;
-			currentF, currentI = floorFromRoom(room);
+			var FI = floorFromRoom(room);
+			currentF = FI[0];
+			currentI = FI[1];
 			draw(currentF);
 		}
 	  	var sData = getData(tourID);
