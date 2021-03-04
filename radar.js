@@ -166,7 +166,14 @@
 			};
 			image3.src = "./assets/f3.png";
 			
-						
+			function floorFromRoom(room) {
+				for (var i=0; i<nodes.length; i++) {
+					if (nodes[i].id === room) {
+						currentF = nodes[i].f;
+						break;
+					}
+				}			
+			}
 
 			function dot(item, floor) {
 				var cRoom = current;
