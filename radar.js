@@ -332,19 +332,28 @@
 					}
 				}
 				else if (scale*X>10 && scale*Y>10 && scale*X<189 && scale*Y<85) {
-					currentF = 0;
-					draw(0);
+					currentF = 2;
+					draw(2);
 				}
 				else if (scale*X>10 && scale*Y>95 && scale*X<189 && scale*Y<170) {
 					currentF = 1;
 					draw(1);
 				}
 				else if (scale*X>10 && scale*Y>180 && scale*X<189 && scale*Y<255) {
-					currentF = 2;
-					draw(2);
+					currentF = 0;
+					draw(0);
 				}
 				else {
-					
+					for (var i=0; i<nodes.length; i++) {
+						var n = nodes[i];
+						var sx = scale*X - n.x;
+						var sy = scale*Y - n.y;
+						var r = (sy^2 + sx^2)^0.5;
+						
+						if (n.f === currentF && sx > n.x && r<10 ) {
+							alert("Clicked "+n.id);
+						}
+					}
 				}
 				
 			}
