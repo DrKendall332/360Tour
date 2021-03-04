@@ -53,6 +53,18 @@ var markers = {
 	    scale: [1,2],
 	    data: {type: 'Info'}
   	},
+	{	 
+	    id: 'MrCampbell',
+	    y: 1250,
+	    x: 5220,
+	    image: 'assets/inspect.png',
+	    width: 32,
+	    height: 32,
+	    tooltip: 'Mr Campbell\'s Office',
+	    content: 'Mr Campbell\'s Office',
+	    scale: [1,2],
+	    data: {type: 'Info'}
+  	},
        {
 	    id: 's6social1',
 	    y: 1261,
