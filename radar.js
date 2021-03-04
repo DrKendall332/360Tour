@@ -222,9 +222,9 @@
 				
 				ctx.clearRect(10, 10, 179, 50);
 				ctx.fillStyle = "#FFFFFF";
-				ctx.fillRect(10,10,179,75);
+				ctx.fillRect(10,10,179,50);
 				ctx.stroke();
-				ctx.rect(10,10,179,75);
+				ctx.rect(10,10,179,50);
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===2) {
@@ -236,9 +236,9 @@
 				
 				ctx.clearRect(10, 70, 179, 50);
 				ctx.fillStyle = "#FFFFFF";
-				ctx.fillRect(10,95,179,75);
+				ctx.fillRect(10,70,179,50);
 				ctx.stroke();
-				ctx.rect(10,95,179,75);
+				ctx.rect(10,70,179,50);
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===1) {
@@ -248,11 +248,11 @@
 					ctx.strokeText("Floor 2", 15, 160); 
 				}
 				
-				ctx.clearRect(10, 180, 179, 75);
+				ctx.clearRect(10, 130, 179, 50);
 				ctx.fillStyle = "#FFFFFF";
 				ctx.fillRect(10,130,179,50);
 				ctx.stroke();
-				ctx.rect(10,180,179,75);
+				ctx.rect(10,130,179,50);
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===0) {
@@ -268,7 +268,7 @@
 				ctx.lineTo(1070,890);
 				ctx.stroke();
 				
-				if (parseInt(canvas.style.opacity) !=="1") {
+				if (parseInt(canvas.style.opacity) !==1) {
 					ctx.moveTo(1074,890);
 					ctx.lineTo(980,890);
 					ctx.stroke();
