@@ -188,7 +188,7 @@
 					}
 					ctx.beginPath();
 					ctx.arc(item.x, item.y, radius, 0, 2 * Math.PI)
-					ctx.fill();
+					//ctx.fill();
 				}
 			}
 			
