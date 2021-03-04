@@ -25,7 +25,7 @@
 {id:'dining',x:319,y:489,f:0,z:0},
 {id:'coffeeBar',x:435,y:491,f:0,z:335},
 {id:'n1_stair',x:518,y:425,f:0,z:0},
-{id:'n1C',x:537,y:462,f:0,z:0},
+{id:'n1C',x:537,y:462,f:0,z:345},
 {id:'n1_confRoom',x:565,y:480,f:0,z:180},
 {id:'n1_musicPract',x:565,y:445,f:0,z:180},
 {id:'music1',x:599,y:419,f:0,z:90},
