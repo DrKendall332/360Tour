@@ -144,7 +144,7 @@
 {id:'outsideN',x:621,y:10,f:0,z:180},
 {id:'outsideS',x:133,y:211,f:0,z:155},
 ];
-			var currentF;
+			var currentF = 1;
 			var current = "foyer";
 			var currentI = 0;
 			
