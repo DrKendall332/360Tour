@@ -47,7 +47,7 @@
 	script.onload = function () {
 		loaded = true;
 		current = defaultRoom;
-		currentF = floorFromRoom(current);
+		currentF, currentI = floorFromRoom(current);
 	}
 	script.src = './radar.js';
 	document.body.appendChild(script);
@@ -89,7 +89,7 @@
 	  script.onload = function () {
 	  	if (useRadar && loaded) {
 			current = room;
-			currentF = floorFromRoom(room);
+			currentF, currentI = floorFromRoom(room);
 			draw(currentF);
 		}
 	  	var sData = getData(tourID);
@@ -198,7 +198,11 @@ markersPlugin.on('select-marker', (e, marker) => {
       viewer.plugins.markers.show()
    }
 viewer.enterFullscreen = function() {myFullscreen()};
-
+viewer.on('position-updated', (e, position) => {
+	drawArrow();
+});
+	
+	
 loadNewRoom(defaultRoom, null, null);
 
 </script>
