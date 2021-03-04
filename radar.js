@@ -325,7 +325,7 @@
 				var b = screen.availHeight;
 				
 				var scale;
-				var nScale; = Math.max(W/a, H/b);;
+				var nScale;
 				if (parseInt(e.target.style.opacity)===1) {
 					scale = Math.max(W/a, H/b);
 					nScale = 4;
