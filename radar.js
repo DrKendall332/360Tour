@@ -215,6 +215,8 @@
 			function drawOverlay(floor) {			
 				var ctx = canvas.getContext("2d");
 				ctx.clearRect(900, 750, canvas.width, canvas.height);
+				ctx.fillStyle = "#FFFFFF";
+				ctx.fillRect(900, 750, canvas.width, canvas.height);
 				ctx.beginPath();
 				ctx.lineWidth="4";
 				ctx.rect(900,750,179,149);
@@ -228,10 +230,10 @@
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===2) {
-					ctx.strokeText(" > Floor 3 <", 15, 75); 
+					ctx.strokeText(" > Floor 3 <", 15, 50); 
 				}
 				else {
-					ctx.strokeText("Floor 3", 15, 75); 
+					ctx.strokeText("Floor 3", 15, 50); 
 				}
 				
 				ctx.clearRect(10, 70, 179, 50);
@@ -242,10 +244,10 @@
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===1) {
-					ctx.strokeText(" > Floor 2 <", 15, 160); 
+					ctx.strokeText(" > Floor 2 <", 15, 110); 
 				}
 				else {
-					ctx.strokeText("Floor 2", 15, 160); 
+					ctx.strokeText("Floor 2", 15, 110); 
 				}
 				
 				ctx.clearRect(10, 130, 179, 50);
@@ -256,10 +258,10 @@
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===0) {
-					ctx.strokeText(" > Floor 1 <", 15, 245); 
+					ctx.strokeText(" > Floor 1 <", 15, 170); 
 				}
 				else {
-					ctx.strokeText("Floor 1", 15, 245); 
+					ctx.strokeText("Floor 1", 15, 170); 
 				}
 				
 				ctx.beginPath();
@@ -328,7 +330,7 @@
 				var scale;
 				var nScale;
 				if (parseInt(canvas.style.opacity)===1) {
-					scale = Math.max(W/a, H/b);
+					scale = 1.1*Math.max(W/a, H/b);
 					nScale = 4;
 				}
 				else {
