@@ -145,7 +145,7 @@
 {id:'outsideS',x:133,y:211,f:0,z:155},
 ];
 			var currentF = 1;
-			var current = "guidanceC";
+			var current = "foyer";
 			
 			var image1 = new Image();
 			image1.onload = function() {
@@ -165,7 +165,9 @@
 				draw(currentF);}
 			};
 			image3.src = "./assets/f3.png";
-		
+			
+						
+
 			function dot(item, floor) {
 				var cRoom = current;
 				if (item.f === floor) {
@@ -212,9 +214,16 @@
 				ctx.drawImage(F[floor],0,0);
 				
 				drawOverlay(floor);
+				
+				for (var i=0; i<nodes.length; i++) {
+					dot(nodes[i], floor);
+				}
 			}
 			
 			function drawOverlay(floor) {
+				if (floor !== currentF) {
+					return;
+				}
 				ctx = cArrow.getContext("2d");
 				ctx.clearRect(0, 0, cArrow.width, cArrow.height);
 				ctx.beginPath();
@@ -242,10 +251,6 @@
 					ctx.moveTo(910,756);
 					ctx.lineTo(910,846);
 					ctx.stroke();
-				}
-								
-				for (var i=0; i<nodes.length; i++) {
-					dot(nodes[i], floor);
 				}
 			}
 			
