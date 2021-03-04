@@ -250,6 +250,7 @@
 			}
 			
 			function radarClick(e) {
+				alert("click works");
 				if (e.layerX > parseInt(e.target.style.width)*0.83 && e.layerY > parseInt(e.target.style.height)*0.83) {
 					if (parseInt(e.target.style.height)===900) {
 						e.target.style.height = "225px";
