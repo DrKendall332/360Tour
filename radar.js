@@ -152,23 +152,18 @@
 			var image2 = new Image();
 			var image3 = new Image();
 
-			function drawF(currentF) {
-				image1.onload = function() {
-					if (currentF===0) {
-					draw(currentF);}
-				};
+			function drawF(F) {
+				if (F===0) {
+					image1.onload = function() { draw(0); };
+				}
+				else if (F===1) {
+					image2.onload = function() { draw(1); };
+				}
+				else {	
+					image3.onload = function() { draw(2); };
+				}	
 				image1.src = "./assets/f1.png";
-				
-				image2.onload = function() {
-					if (currentF===1) {
-					draw(currentF);}
-				};
 				image2.src = "./assets/f2.png";
-		
-				image3.onload = function() {
-					if (currentF===2) {
-					draw(currentF);}
-				};
 				image3.src = "./assets/f3.png";
 			}
 
