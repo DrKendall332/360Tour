@@ -188,13 +188,14 @@
 					}
 					else {
 						ctx.fillStyle = "#0000FF";
-						ctx.strokeStyle = '#ff0000';
+						ctx.strokeStyle = '#0000FF';
 						ctx.beginPath();
 						ctx.lineWidth="2";
 						ctx.arc(item.x, item.y, radius, 0, 2 * Math.PI)
 						ctx.stroke();
 					}
 				}
+				ctx.strokeStyle = '#000000';
 			}
 			
 			function draw(floor) {
@@ -267,7 +268,7 @@
 				ctx.lineTo(1070,890);
 				ctx.stroke();
 				
-				if (parseInt(cArrow.style.width) !==1080) {
+				if (parseInt(.style.width) !==1080) {
 					ctx.moveTo(1074,890);
 					ctx.lineTo(980,890);
 					ctx.stroke();
@@ -321,12 +322,12 @@
 				const W = 1080;
 				const H = 900;
 				
-				var a = screen.availWidth;
-				var b = screen.availHeight;
+				var a = window.innerWidth;
+				var b = window.innerHeight;
 				
 				var scale;
 				var nScale;
-				if (parseInt(radar.style.opacity)===1) {
+				if (parseInt(canvas.style.opacity)===1) {
 					scale = Math.max(W/a, H/b);
 					nScale = 4;
 				}
@@ -337,11 +338,11 @@
 					
 				
 				if (X > parseInt(e.target.style.width)*0.83 && Y > parseInt(e.target.style.height)*0.83) {
-					if (parseInt(radar.style.opacity)===1) {
-						radar.style.opacity = "0.5";
+					if (parseInt(canvas.style.opacity)===1) {
+						canvas.style.opacity = "0.5";
 					}
 					else {
-						radar.style.opacity = "1";
+						canvas.style.opacity = "1";
 					}
 					e.target.style.height = (H/nScale) + "px";
 					e.target.style.width = (W/nScale) + "px";
