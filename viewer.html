@@ -198,9 +198,12 @@ markersPlugin.on('select-marker', (e, marker) => {
       viewer.plugins.markers.show()
    }
 viewer.enterFullscreen = function() {myFullscreen()};
-viewer.on('position-updated', (e, position) => {
-	drawArrow();
-});
+
+if (useRadar) {
+	viewer.on('position-updated', (e, position) => {
+		drawArrow();
+	});
+}
 	
 	
 loadNewRoom(defaultRoom, null, null);
