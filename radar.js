@@ -274,6 +274,7 @@
 			function drawArrow() {
 				var item = nodes[currentI];
 				if (item.f !== currentF) {
+					ctxA.clearRect(0, 0, cArrow.width, cArrow.height);
 					return;
 				}
 				var angle = viewer.prop.position.longitude;
@@ -350,8 +351,8 @@
 						var sy = scale*Y - n.y;
 						var r = (sy^2 + sx^2)^0.5;
 						
-						if (n.f === currentF && sx > n.x && r<10 ) {
-							alert("Clicked "+n.id);
+						if (n.f === currentF && r<10 ) {
+							alert("Clicked "+n.id+" "+r);
 						}
 					}
 				}
