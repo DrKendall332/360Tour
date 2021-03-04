@@ -194,8 +194,8 @@
 						ctx.arc(item.x, item.y, radius, 0, 2 * Math.PI)
 						ctx.stroke();
 					}
+					ctx.strokeStyle = '#000000';
 				}
-				ctx.strokeStyle = '#000000';
 			}
 			
 			function draw(floor) {
