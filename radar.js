@@ -215,8 +215,10 @@
 				ctx.stroke();
 				
 				ctx.clearRect(10, 10, 179, 75);
-				ctx.rect(10,10,179,75);
 				ctx.fillStyle = "#000000";
+				ctx.fillRect(10,10,179,75);
+				ctx.stroke();
+				ctx.rect(10,10,179,75);
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===2) {
@@ -227,8 +229,10 @@
 				}
 				
 				ctx.clearRect(10, 95, 179, 75);
-				ctx.rect(10,95,179,75);
 				ctx.fillStyle = "#000000";
+				ctx.fillRect(10,95,179,75);
+				ctx.stroke();
+				ctx.rect(10,95,179,75);
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===1) {
@@ -239,8 +243,10 @@
 				}
 				
 				ctx.clearRect(10, 180, 179, 75);
-				ctx.rect(10,180,179,75);
 				ctx.fillStyle = "#000000";
+				ctx.fillRect(10,180,179,75);
+				ctx.stroke();
+				ctx.rect(10,180,179,75);
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===0) {
