@@ -219,24 +219,32 @@
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===2) {
-					ctx.strokeText(" > Floor 3 <", 15, 15); 
+					ctx.strokeText(" > Floor 3 <", 15, 75); 
 				}
 				else {
-					ctx.strokeText("Floor 3", 15, 15); 
+					ctx.strokeText("Floor 3", 15, 75); 
 				}
 				
 				ctx.clearRect(10, 95, 179, 75);
 				ctx.rect(10,95,179,75);
 				ctx.stroke();
+				ctx.font = "30px Arial";
+				if (floor ===1) {
+					ctx.strokeText(" > Floor 2 <", 15, 160); 
+				}
+				else {
+					ctx.strokeText("Floor 2", 15, 160); 
+				}
+				
 				ctx.clearRect(10, 180, 179, 75);
 				ctx.rect(10,180,179,75);
 				ctx.stroke();
 				ctx.font = "30px Arial";
-				if (floor ===1) {
-					ctx.strokeText(" > Floor 2 <", 15, 15); 
+				if (floor ===0) {
+					ctx.strokeText(" > Floor 1 <", 15, 245); 
 				}
 				else {
-					ctx.strokeText("Floor 2", 15, 100); 
+					ctx.strokeText("Floor 1", 15, 245); 
 				}
 				
 				ctx.beginPath();
@@ -244,13 +252,6 @@
 				ctx.moveTo(910,760);
 				ctx.lineTo(1070,890);
 				ctx.stroke();
-				ctx.font = "30px Arial";
-					if (floor ===0) {
-					ctx.strokeText(" > Floor 1 <", 15, 15); 
-				}
-				else {
-					ctx.strokeText("Floor 1", 15, 185); 
-				}
 				
 				if (parseInt(cArrow.style.width) !==1080) {
 					ctx.moveTo(1074,890);
@@ -303,6 +304,15 @@
 				var X = e.layerX;
 				var Y = e.layerY;
 				
+				var scale;
+				if (parseInt(e.target.style.height)===900) {
+					scale = 1;
+				}
+				else {
+					scale = 4;
+				}
+					
+				
 				if (X > parseInt(e.target.style.width)*0.83 && Y > parseInt(e.target.style.height)*0.83) {
 					if (parseInt(e.target.style.height)===900) {
 						e.target.style.height = "225px";
@@ -321,13 +331,13 @@
 						drawOverlay(currentF);
 					}
 				}
-				else if (X>10 && Y>10 && X<189 &&Y<85) {
+				else if (scale*X>10 && scale*Y>10 && scale*X<189 && scale*Y<85) {
 					draw(0);
 				}
-				else if (X>10 && Y>95 && X<189 &&Y<170) {
+				else if (scale*X>10 && scale*Y>95 && scale*X<189 && scale*Y<170) {
 					draw(1);
 				}
-				else if (X>10 && Y>180 && X<189 &&Y<255) {
+				else if (scale*X>10 && scale*Y>180 && scale*X<189 && scale*Y<255) {
 					draw(2);
 				}
 				else {
