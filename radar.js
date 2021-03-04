@@ -208,6 +208,7 @@
 			
 			function drawOverlay(floor) {			
 				var ctx = canvas.getContext("2d");
+				ctx.clearRect(0, 0, cArrow.width, cArrow.height);
 				ctx.beginPath();
 				ctx.lineWidth="4";
 				ctx.rect(900,750,179,149);
