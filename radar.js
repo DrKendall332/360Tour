@@ -335,7 +335,7 @@
 				}
 				else {
 					scale = 4;
-					nScale = Math.max(W/a, H/b);
+					nScale = 1.1*Math.max(W/a, H/b);
 				}
 					
 				
