@@ -40,7 +40,29 @@ var markers = {
 	    scale: [1,2],
 	    data: {type: '3Droom', room: 's2b_stair', id:'SLT2', x:0, y:0}
   	},
-
+{	 
+	    id: 'MrAtkinson',
+	    y: 1199,
+	    x: 3536,
+	    image: 'assets/inspect.png',
+	    width: 32,
+	    height: 32,
+	    tooltip: 'Mr Atkinson\'s Office',
+	    content: 'Mr Atkinson\'s Office',
+	    scale: [1,2],
+	    data: {type: 'Info'}
+  	},{	 
+	    id: 'MrChristie',
+	    y: 1091,
+	    x: 4409,
+	    image: 'assets/inspect.png',
+	    width: 32,
+	    height: 32,
+	    tooltip: 'Mr Christie\'s Office',
+	    content: 'Mr Christie\'s Office',
+	    scale: [1,2],
+	    data: {type: 'Info'}
+  	},
 	],
    }
 
