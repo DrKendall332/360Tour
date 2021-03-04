@@ -47,8 +47,9 @@
 	script.onload = function () {
 		loaded = true;
 		current = defaultRoom;
-		currentF, currentI = floorFromRoom(defaultRoom);
-		drawF(currentF);
+		F, currentI = floorFromRoom(defaultRoom);
+		drawF(F);
+		currentF = F;
 	}
 	script.src = './radar.js';
 	document.head.appendChild(script);
