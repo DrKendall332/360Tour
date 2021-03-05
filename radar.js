@@ -320,7 +320,7 @@
 					ctx.rect(910,760,39,32);
 					ctx.stroke();
 					ctx.font = "30px Times New Roman";
-					ctx.strokeText("Map Overlay", 915, 850);
+					ctx.strokeText("Map Overlay", 913, 850);
 				}
 				//new minimiser
 				ctx.beginPath();
@@ -395,6 +395,19 @@
 					canvas.style.height = (H/nScale) + "px";
 					canvas.style.width = (W/nScale) + "px";
 					drawOverlay(currentF);
+				}
+				else if (X > parseInt(e.target.style.width)*0.67 && Y > parseInt(e.target.style.height)*0.67) {
+					canvas.style.visibility = "hidden";
+					cArrow.style.visibility = "hidden";
+					cKey.style.left = "10px";
+					cKey.style.top = "10px";
+					cKey.style.width = "270px";
+					cKey.style.height = "20px";
+					cKey.style.visibility = "visible";
+					cKey.style.opacity = "0.5";
+					var keyctx = cKey.getContext("2d");
+					keyctx.font = "30px Times New Roman";
+					keyctx.strokeText("Show Map", 19, 10);					
 				}
 				else if (scale*X>10 && scale*Y>10 && scale*X<189 && scale*Y<60) {
 					currentF = 2;
