@@ -205,7 +205,7 @@
 				}
 			}
 
-			var keyImgs = [{s:newImage(), n:new Image(), sl:false, nl:false}, {s:newImage(), n:new Image(), sl:false, nl:false}, {s:newImage(), n:new Image(), sl:false, nl:false}];
+			var keyImgs = [{s:new Image(), n:new Image(), sl:false, nl:false}, {s:new Image(), n:new Image(), sl:false, nl:false}, {s:new Image(), n:new Image(), sl:false, nl:false}];
 			keyImgs[0].s.onload = function() {keyImgs[0].sl=true;};
 			keyImgs[0].n.onload = function() {keyImgs[0].nl=true;};
 			keyImgs[1].s.onload = function() {keyImgs[1].sl=true;};
