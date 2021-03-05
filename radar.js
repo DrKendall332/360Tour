@@ -420,6 +420,9 @@
 					cKey.style.height = "20px";
 					cKey.style.visibility = "visible";
 					cKey.style.opacity = "0.5";
+					cKey.style.zIndex="102";
+					cKey.width=270;
+					cKey.height=20;
 					var keyctx = cKey.getContext("2d");
 					keyctx.fillStyle = "#FFFFFF";
 					keyctx.fillRect(0,0,270,20);
@@ -453,6 +456,14 @@
 				}
 				
 			}
+
+			function keyClick(e) {
+				canvas.style.visibility = "visible";
+				cArrow.style.visibility = "visible";
+				cKey.style.visibility = "hidden";
+				cKey.style.zIndex="100";
+			}
 			
 			cArrow.addEventListener('click', function(e) { radarClick(e); }, false);
+			cKey.addEventListener('click', function(e) { keyClick(e); }, false);
 			
