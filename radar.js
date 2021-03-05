@@ -204,6 +204,21 @@
 					ctx.strokeStyle = '#000000';
 				}
 			}
+
+			var keyImgs = [{s:newImage, n:new Image(), sl=false, nl=false}, {s:newImage, n:new Image(), sl=false, nl=false}, {s:newImage, n:new Image(), sl=false, nl=false}];
+			keyImgs[0].s.onload = function() {keyImgs[0].sl=true;};
+			keyImgs[0].n.onload = function() {keyImgs[0].nl=true;};
+			keyImgs[1].s.onload = function() {keyImgs[1].sl=true;};
+			keyImgs[1].n.onload = function() {keyImgs[1].nl=true;};
+			keyImgs[2].s.onload = function() {keyImgs[2].sl=true;};
+			keyImgs[2].n.onload = function() {keyImgs[2].nl=true;};
+
+			keyImgs[0].s.src = "./assets/f1ks.png";
+			keyImgs[0].n.src = "./assets/f1kn.png";
+			keyImgs[1].s.src = "./assets/f2ks.png";
+			keyImgs[1].n.src = "./assets/f2kn.png";
+			keyImgs[2].s.src = "./assets/f3ks.png";
+			keyImgs[2].n.src = "./assets/f3kn.png";
 			
 			function draw(floor) {
 					
@@ -476,6 +491,13 @@
 					cKey.style.width= 758/252*(b - 10 - (H/nScale) - 20) +"px";
 					cKey.style.top=10+ (H/nScale) +"px";
 					cKey.style.left="10px";
+					
+					if (keyImgs[currentF].sl) {
+						ctx.drawImage(keyImgs[currentF].s,0,0);
+					}
+					if (keyImgs[currentF].nl) {
+						ctx.drawImage(keyImgs[currentF].n,379,0);
+					}
 				}
 				else { //wide
 					cKey.width = 379;
@@ -484,6 +506,13 @@
 					cKey.style.height= 504/379*(a - 10 - (W/nScale)) +"px";
 					cKey.style.top="10px";
 					cKey.style.left=10 + (W/nScale)+"px";
+					
+					if (keyImgs[currentF].sl) {
+						ctx.drawImage(keyImgs[currentF].s,0,0);
+					}
+					if (keyImgs[currentF].nl) {
+						ctx.drawImage(keyImgs[currentF].n,252,0);
+					}
 				}
 				cKey.style.visibility="visible";
 			}
