@@ -205,7 +205,7 @@
 				}
 			}
 
-			var keyImgs = [{s:newImage, n:new Image(), sl=false, nl=false}, {s:newImage, n:new Image(), sl=false, nl=false}, {s:newImage, n:new Image(), sl=false, nl=false}];
+			var keyImgs = [{s:newImage, n:new Image(), sl:false, nl:false}, {s:newImage, n:new Image(), sl:false, nl:false}, {s:newImage, n:new Image(), sl:false, nl:false}];
 			keyImgs[0].s.onload = function() {keyImgs[0].sl=true;};
 			keyImgs[0].n.onload = function() {keyImgs[0].nl=true;};
 			keyImgs[1].s.onload = function() {keyImgs[1].sl=true;};
@@ -466,23 +466,7 @@
 				cKey.style.visibility="hidden";
 			}
 
-			function makeMax() {
-				const W = 1080;
-				const H = 900;
-				var a = window.innerWidth;
-				var b = window.innerHeight;
-				
-				var scale;
-				var nScale;
-				scale = 4;
-				nScale = 1.1*Math.max(W/a, H/b);
-				cArrow.style.height = (H/nScale) + "px";
-				cArrow.style.width = (W/nScale) + "px";
-				canvas.style.height = (H/nScale) + "px";
-				canvas.style.width = (W/nScale) + "px";
-				canvas.style.opacity = "1";
-				drawOverlay(currentF);
-				
+			function makeMaxKey() {
 				// 379 x 252 key images - 2 stacked or side-by-side
 				if (W/a > H/b) { //tall
 					cKey.width = 758;
@@ -517,6 +501,28 @@
 				cKey.style.visibility="visible";
 			}
 
+			function makeMax() {
+				const W = 1080;
+				const H = 900;
+				var a = window.innerWidth;
+				var b = window.innerHeight;
+				
+				var scale;
+				var nScale;
+				scale = 4;
+				nScale = 1.1*Math.max(W/a, H/b);
+				cArrow.style.height = (H/nScale) + "px";
+				cArrow.style.width = (W/nScale) + "px";
+				canvas.style.height = (H/nScale) + "px";
+				canvas.style.width = (W/nScale) + "px";
+				canvas.style.opacity = "1";
+				drawOverlay(currentF);
+				
+				makeMaxKey();
+			}
+
+			
+
 			function radarClick(e) {
 				var X = e.layerX;
 				var Y = e.layerY;
@@ -549,6 +555,7 @@
 					}
 					else {
 						canvas.style.opacity = "1";
+						makeMaxKey();
 					}
 					e.target.style.height = (H/nScale) + "px";
 					e.target.style.width = (W/nScale) + "px";
