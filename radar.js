@@ -465,6 +465,7 @@
 				var nScale;
 				nScale = 1.1*Math.max(W/a, H/b);
 				
+				var ctx = cKey.getContext("2d");
 				// 379 x 252 key images - 2 stacked or side-by-side
 				if (W/a > H/b) { //tall
 					cKey.width = 758;
@@ -497,7 +498,6 @@
 					cKey.style.top="10px";
 					cKey.style.left=10 + (W/nScale)+"px";
 					
-					var ctx = cKey.getContext("2d");
 					if (keyImgs[currentF].sl) {
 						ctx.drawImage(keyImgs[currentF].s,0,0);
 					}
