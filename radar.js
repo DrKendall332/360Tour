@@ -611,6 +611,9 @@
 			}
 
 			function keyClick(e) {
+				if (canvas.style.visibility === "visible") {
+					return;
+				}
 				canvas.style.visibility = "visible";
 				cArrow.style.visibility = "visible";
 				cKey.style.visibility = "hidden";
