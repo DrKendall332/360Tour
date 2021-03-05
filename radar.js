@@ -577,14 +577,23 @@
 				else if (scale*X>10 && scale*Y>10 && scale*X<189 && scale*Y<60) {
 					currentF = 2;
 					draw(2);
+					if (parseInt(canvas.style.opacity)===1) {
+						makeMaxKey();
+					}
 				}
 				else if (scale*X>10 && scale*Y>70 && scale*X<189 && scale*Y<120) {
 					currentF = 1;
 					draw(1);
+					if (parseInt(canvas.style.opacity)===1) {
+						makeMaxKey();
+					}
 				}
 				else if (scale*X>10 && scale*Y>130 && scale*X<189 && scale*Y<180) {
 					currentF = 0;
 					draw(0);
+					if (parseInt(canvas.style.opacity)===1) {
+						makeMaxKey();
+					}
 				}
 				else {
 					for (var i=0; i<nodes.length; i++) {
