@@ -239,12 +239,14 @@
 				ctx.rect(710, 750, 179,149);
 				ctx.stroke();
 				
+				ctx.lineWidth="4";
 				ctx.clearRect(10, 10, 179, 50);
 				ctx.fillStyle = "#FFFFFF";
 				ctx.fillRect(10,10,179,50);
 				ctx.stroke();
 				ctx.rect(10,10,179,50);
 				ctx.stroke();
+				ctx.lineWidth="1";
 				ctx.font = "30px Times New Roman";
 				if (floor ===2) {
 					ctx.strokeText(" > Level 3 <", 15, 50); 
@@ -253,12 +255,14 @@
 					ctx.strokeText("Level 3", 15, 50); 
 				}
 				
+				ctx.lineWidth="4";
 				ctx.clearRect(10, 70, 179, 50);
 				ctx.fillStyle = "#FFFFFF";
 				ctx.fillRect(10,70,179,50);
 				ctx.stroke();
 				ctx.rect(10,70,179,50);
 				ctx.stroke();
+				ctx.lineWidth="1";
 				ctx.font = "30px Times New Roman";
 				if (floor ===1) {
 					ctx.strokeText(" > Level 2 <", 15, 110); 
@@ -267,12 +271,14 @@
 					ctx.strokeText("Level 2", 15, 110); 
 				}
 				
+				ctx.lineWidth="4";
 				ctx.clearRect(10, 130, 179, 50);
 				ctx.fillStyle = "#FFFFFF";
 				ctx.fillRect(10,130,179,50);
 				ctx.stroke();
 				ctx.rect(10,130,179,50);
 				ctx.stroke();
+				ctx.lineWidth="1";
 				ctx.font = "30px Times New Roman";
 				if (floor ===0) {
 					ctx.strokeText(" > Level 1 <", 15, 170); 
@@ -302,6 +308,7 @@
 					ctx.lineWidth="4";
 					ctx.rect(910,760,159,129);
 					ctx.stroke();
+					ctx.lineWidth="1";
 					ctx.font = "30px Times New Roman";
 					ctx.strokeText("Maximise", 930, 850); 
 				}
@@ -319,15 +326,17 @@
 					ctx.lineWidth="4";
 					ctx.rect(910,760,39,32);
 					ctx.stroke();
+					ctx.lineWidth="1";
 					ctx.font = "30px Times New Roman";
-					ctx.strokeText("Map Overlay", 913, 850);
+					ctx.strokeText("Map Overlay", 908, 850);
 				}
 				//new minimiser
 				ctx.beginPath();
 				ctx.lineWidth="4";
 				ctx.rect(720,760,39,12);
 				ctx.stroke();
-				ctx.font = "30px Arial";
+				ctx.lineWidth="1";
+				ctx.font = "30px Times New Roman";
 				ctx.strokeText("Minimise", 740, 850);
 				
 			}
