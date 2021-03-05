@@ -443,6 +443,12 @@
 				canvas.style.width = (W/nScale) + "px";
 				canvas.style.opacity = "0.5";
 				drawOverlay(currentF);
+				
+				cKey.style.width="10px";
+				cKey.style.height="10px";
+				cKey.style.top="10px";
+				cKey.style.left="10px";
+				cKey.style.visibility="hidden";
 			}
 
 			function makeMax() {
@@ -461,6 +467,25 @@
 				canvas.style.width = (W/nScale) + "px";
 				canvas.style.opacity = "1";
 				drawOverlay(currentF);
+				
+				// 379 x 252 key images - 2 stacked or side-by-side
+				if (W/a > H/b) { //tall
+					cKey.width = 758;
+					cKey.height= 252;
+					cKey.style.height= (b - 10 - (H/nScale) - 20) +"px";
+					cKey.style.width= 758/252*(b - 10 - (H/nScale) - 20) +"px";
+					cKey.style.top=10+ (H/nScale) +"px";
+					cKey.style.left="10px";
+				}
+				else { //wide
+					cKey.width = 379;
+					cKey.height= 504;
+					cKey.style.width= (a - 10 - (W/nScale)) +"px";
+					cKey.style.height= 504/379*(a - 10 - (W/nScale)) +"px";
+					cKey.style.top="10px";
+					cKey.style.left=10 + (W/nScale)+"px";
+				}
+				cKey.style.visibility="visible";
 			}
 
 			function radarClick(e) {
@@ -487,6 +512,11 @@
 				if (X > parseInt(e.target.style.width)*0.83 && Y > parseInt(e.target.style.height)*0.83) {
 					if (parseInt(canvas.style.opacity)===1) {
 						canvas.style.opacity = "0.5";
+						cKey.style.width="10px";
+						cKey.style.height="10px";
+						cKey.style.top="10px";
+						cKey.style.left="10px";
+						cKey.style.visibility="hidden";
 					}
 					else {
 						canvas.style.opacity = "1";
@@ -534,10 +564,10 @@
 				cArrow.style.visibility = "visible";
 				cKey.style.visibility = "hidden";
 				cKey.style.zIndex="100";
-				if (e.layerX >47) {
+				if (e.layerX < 47) {
 					makeInlay();
 				}
-				else if (e.layerX <47) {
+				else if (e.layerX > 47) {
 					makeMax();
 				}
 			}
