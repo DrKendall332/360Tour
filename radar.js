@@ -282,11 +282,12 @@
 					ctx.strokeText("Level 1", 15, 170); 
 				}
 				
-				ctx.beginPath();
-				ctx.lineWidth="8";
-				ctx.moveTo(910,760);
-				ctx.lineTo(1070,890);
-				ctx.stroke();
+				//old arrow body
+				//ctx.beginPath();
+				//ctx.lineWidth="8";
+				//ctx.moveTo(910,760);
+				//ctx.lineTo(1070,890);
+				//ctx.stroke();
 				
 				if (parseInt(canvas.style.opacity) !==1) {
 					// old arrow style
@@ -297,13 +298,13 @@
 					//ctx.lineTo(1070,800);
 					//ctx.stroke();
 					
-					//new stlye
+					//new style
 					ctx.beginPath();
 					ctx.lineWidth="4";
-					ctx.rect(910,740,159,129);
+					ctx.rect(910,760,159,129);
 					ctx.stroke();
 					ctx.font = "30px Arial";
-					ctx.strokeText("Maximise", 15, 170); 
+					ctx.strokeText("Maximise", 910, 850); 
 				}
 				else {
 					//old arrow style
@@ -314,21 +315,21 @@
 					//ctx.lineTo(910,846);
 					//ctx.stroke();
 					
-					//new stlye
+					//new style
 					ctx.beginPath();
 					ctx.lineWidth="4";
-					ctx.rect(910,740,39,32);
+					ctx.rect(910,760,39,32);
 					ctx.stroke();
 					ctx.font = "30px Arial";
-					ctx.strokeText("Map Overlay", 15, 170);
+					ctx.strokeText("Map Overlay", 910, 850);
 				}
 				//new minimiser
 				ctx.beginPath();
 				ctx.lineWidth="4";
-				ctx.rect(720,740,39,12);
+				ctx.rect(720,760,39,12);
 				ctx.stroke();
 				ctx.font = "30px Arial";
-				ctx.strokeText("Minimise", 15, 170);
+				ctx.strokeText("Minimise", 720, 850);
 				
 			}
 			
