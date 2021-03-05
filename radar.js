@@ -12,6 +12,13 @@
 			cArrow.width=1080;
 			cArrow.id = "radarArrow";
 			document.body.appendChild(cArrow);
+
+			var cKey = document.createElement("CANVAS");
+			cKey.style.cssText = "visibility:hidden; position:absolute; top:10px; left:10px; width:270px; height:225px; z-index:101";
+			cKey.height=900;
+			cKey.width=1080;
+			cKey.id = "radarKey";
+			document.body.appendChild(cKey);
 			
 			var nodes =[
 {id:'foyer',x:339,y:584,f:1,z:280},
@@ -214,12 +221,23 @@
 			
 			function drawOverlay(floor) {			
 				var ctx = canvas.getContext("2d");
+				
+				// right resize button
 				ctx.clearRect(900, 750, canvas.width, canvas.height);
 				ctx.fillStyle = "#FFFFFF";
 				ctx.fillRect(900, 750, canvas.width, canvas.height);
 				ctx.beginPath();
 				ctx.lineWidth="4";
 				ctx.rect(900,750,179,149);
+				ctx.stroke();
+				
+				// left resize button
+				ctx.clearRect(890, 750, 710, 570);
+				ctx.fillStyle = "#FFFFFF";
+				ctx.fillRect(890, 750, 710, 570);
+				ctx.beginPath();
+				ctx.lineWidth="4";
+				ctx.rect(890, 750, 179,149);
 				ctx.stroke();
 				
 				ctx.clearRect(10, 10, 179, 50);
