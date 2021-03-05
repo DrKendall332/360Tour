@@ -230,10 +230,10 @@
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===2) {
-					ctx.strokeText(" > Floor 3 <", 15, 50); 
+					ctx.strokeText(" > Level 3 <", 15, 50); 
 				}
 				else {
-					ctx.strokeText("Floor 3", 15, 50); 
+					ctx.strokeText("Level 3", 15, 50); 
 				}
 				
 				ctx.clearRect(10, 70, 179, 50);
@@ -244,10 +244,10 @@
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===1) {
-					ctx.strokeText(" > Floor 2 <", 15, 110); 
+					ctx.strokeText(" > Level 2 <", 15, 110); 
 				}
 				else {
-					ctx.strokeText("Floor 2", 15, 110); 
+					ctx.strokeText("Level 2", 15, 110); 
 				}
 				
 				ctx.clearRect(10, 130, 179, 50);
@@ -258,10 +258,10 @@
 				ctx.stroke();
 				ctx.font = "30px Arial";
 				if (floor ===0) {
-					ctx.strokeText(" > Floor 1 <", 15, 170); 
+					ctx.strokeText(" > Level 1 <", 15, 170); 
 				}
 				else {
-					ctx.strokeText("Floor 1", 15, 170); 
+					ctx.strokeText("Level 1", 15, 170); 
 				}
 				
 				ctx.beginPath();
