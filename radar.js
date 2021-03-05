@@ -232,12 +232,12 @@
 				ctx.stroke();
 				
 				// left resize button
-				ctx.clearRect(890, 750, 710, 570);
+				ctx.clearRect(710, 750, 890, 900);
 				ctx.fillStyle = "#FFFFFF";
-				ctx.fillRect(890, 750, 710, 570);
+				ctx.fillRect(710, 750, 890, 900);
 				ctx.beginPath();
 				ctx.lineWidth="4";
-				ctx.rect(890, 750, 179,149);
+				ctx.rect(710, 750, 179,149);
 				ctx.stroke();
 				
 				ctx.clearRect(10, 10, 179, 50);
@@ -289,21 +289,47 @@
 				ctx.stroke();
 				
 				if (parseInt(canvas.style.opacity) !==1) {
-					ctx.moveTo(1074,890);
-					ctx.lineTo(980,890);
+					// old arrow style
+					//ctx.moveTo(1074,890);
+					//ctx.lineTo(980,890);
+					//ctx.stroke();
+					//ctx.moveTo(1070,894);
+					//ctx.lineTo(1070,800);
+					//ctx.stroke();
+					
+					//new stlye
+					ctx.beginPath();
+					ctx.lineWidth="4";
+					ctx.rect(910,740,159,129);
 					ctx.stroke();
-					ctx.moveTo(1070,894);
-					ctx.lineTo(1070,800);
-					ctx.stroke();
+					ctx.font = "30px Arial";
+					ctx.strokeText("Maximise", 15, 170); 
 				}
 				else {
-					ctx.moveTo(906,760);
-					ctx.lineTo(996,760);
+					//old arrow style
+					//ctx.moveTo(906,760);
+					//ctx.lineTo(996,760);
+					//ctx.stroke();
+					//ctx.moveTo(910,756);
+					//ctx.lineTo(910,846);
+					//ctx.stroke();
+					
+					//new stlye
+					ctx.beginPath();
+					ctx.lineWidth="4";
+					ctx.rect(910,740,39,32);
 					ctx.stroke();
-					ctx.moveTo(910,756);
-					ctx.lineTo(910,846);
-					ctx.stroke();
+					ctx.font = "30px Arial";
+					ctx.strokeText("Map Overlay", 15, 170);
 				}
+				//new minimiser
+				ctx.beginPath();
+				ctx.lineWidth="4";
+				ctx.rect(720,740,39,12);
+				ctx.stroke();
+				ctx.font = "30px Arial";
+				ctx.strokeText("Minimise", 15, 170);
+				
 			}
 			
 			function drawArrow() {
