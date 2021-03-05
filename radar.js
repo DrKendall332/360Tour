@@ -222,19 +222,18 @@
 			function drawOverlay(floor) {			
 				var ctx = canvas.getContext("2d");
 				
-				// right resize button
-				ctx.clearRect(900, 750, canvas.width, canvas.height);
+				// clear resize buttons
+				ctx.clearRect(710, 750, canvas.width, canvas.height);
 				ctx.fillStyle = "#FFFFFF";
-				ctx.fillRect(900, 750, canvas.width, canvas.height);
+				
+				// right resize button
+				ctx.fillRect(710, 750, canvas.width, canvas.height);
 				ctx.beginPath();
 				ctx.lineWidth="4";
 				ctx.rect(900,750,179,149);
 				ctx.stroke();
 				
 				// left resize button
-				ctx.clearRect(710, 750, 890, 900);
-				ctx.fillStyle = "#FFFFFF";
-				ctx.fillRect(710, 750, 890, 900);
 				ctx.beginPath();
 				ctx.lineWidth="4";
 				ctx.rect(710, 750, 179,149);
@@ -304,7 +303,7 @@
 					ctx.rect(910,760,159,129);
 					ctx.stroke();
 					ctx.font = "30px Arial";
-					ctx.strokeText("Maximise", 910, 850); 
+					ctx.strokeText("Maximise", 930, 850); 
 				}
 				else {
 					//old arrow style
@@ -321,7 +320,7 @@
 					ctx.rect(910,760,39,32);
 					ctx.stroke();
 					ctx.font = "30px Arial";
-					ctx.strokeText("Map Overlay", 910, 850);
+					ctx.strokeText("Map Overlay", 930, 850);
 				}
 				//new minimiser
 				ctx.beginPath();
@@ -329,7 +328,7 @@
 				ctx.rect(720,760,39,12);
 				ctx.stroke();
 				ctx.font = "30px Arial";
-				ctx.strokeText("Minimise", 720, 850);
+				ctx.strokeText("Minimise", 740, 850);
 				
 			}
 			
