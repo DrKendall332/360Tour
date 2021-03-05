@@ -247,12 +247,13 @@
 				ctx.rect(10,10,179,50);
 				ctx.stroke();
 				ctx.lineWidth="1";
+				ctx.fillStyle = "#000000";
 				ctx.font = "30px Times New Roman";
 				if (floor ===2) {
-					ctx.strokeText(" > Level 3 <", 15, 50); 
+					ctx.fillText(" > Level 3 <", 15, 50); 
 				}
 				else {
-					ctx.strokeText("Level 3", 15, 50); 
+					ctx.fillText("Level 3", 15, 50); 
 				}
 				
 				ctx.lineWidth="4";
@@ -263,12 +264,13 @@
 				ctx.rect(10,70,179,50);
 				ctx.stroke();
 				ctx.lineWidth="1";
+				ctx.fillStyle = "#000000";
 				ctx.font = "30px Times New Roman";
 				if (floor ===1) {
-					ctx.strokeText(" > Level 2 <", 15, 110); 
+					ctx.fillText(" > Level 2 <", 15, 110); 
 				}
 				else {
-					ctx.strokeText("Level 2", 15, 110); 
+					ctx.fillText("Level 2", 15, 110); 
 				}
 				
 				ctx.lineWidth="4";
@@ -279,12 +281,13 @@
 				ctx.rect(10,130,179,50);
 				ctx.stroke();
 				ctx.lineWidth="1";
+				ctx.fillStyle = "#000000";
 				ctx.font = "30px Times New Roman";
 				if (floor ===0) {
-					ctx.strokeText(" > Level 1 <", 15, 170); 
+					ctx.fillText(" > Level 1 <", 15, 170); 
 				}
 				else {
-					ctx.strokeText("Level 1", 15, 170); 
+					ctx.fillText("Level 1", 15, 170); 
 				}
 				
 				//old arrow body
@@ -309,8 +312,9 @@
 					ctx.rect(910,760,159,129);
 					ctx.stroke();
 					ctx.lineWidth="1";
+					ctx.fillStyle = "#000000";
 					ctx.font = "30px Times New Roman";
-					ctx.strokeText("Maximise", 930, 850); 
+					ctx.fillText("Maximise", 930, 850); 
 				}
 				else {
 					//old arrow style
@@ -327,8 +331,9 @@
 					ctx.rect(910,760,39,32);
 					ctx.stroke();
 					ctx.lineWidth="1";
+					ctx.fillStyle = "#000000";
 					ctx.font = "30px Times New Roman";
-					ctx.strokeText("Map Overlay", 908, 850);
+					ctx.fillText("Map Overlay", 908, 850);
 				}
 				//new minimiser
 				ctx.beginPath();
@@ -336,8 +341,9 @@
 				ctx.rect(720,760,39,12);
 				ctx.stroke();
 				ctx.lineWidth="1";
+				ctx.fillStyle = "#000000";
 				ctx.font = "30px Times New Roman";
-				ctx.strokeText("Minimise", 740, 850);
+				ctx.fillText("Minimise", 740, 850);
 				
 			}
 			
@@ -415,8 +421,11 @@
 					cKey.style.visibility = "visible";
 					cKey.style.opacity = "0.5";
 					var keyctx = cKey.getContext("2d");
+					keyctx.fillStyle = "#FFFFFF";
+					keyctx.fillRect(0,0,270,20);
+					keyctx.fillStyle = "#000000";
 					keyctx.font = "30px Times New Roman";
-					keyctx.strokeText("Show Map", 19, 10);					
+					keyctx.fillText("Show Map", 19, 10);					
 				}
 				else if (scale*X>10 && scale*Y>10 && scale*X<189 && scale*Y<60) {
 					currentF = 2;
