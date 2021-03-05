@@ -443,19 +443,10 @@
 
 
 			function makeInlay() {
-				const W = 1080;
-				const H = 900;
-				var a = window.innerWidth;
-				var b = window.innerHeight;
-				
-				var scale;
-				var nScale;
-				scale = 1.1*Math.max(W/a, H/b);
-				nScale = 4;
-				cArrow.style.height = (H/nScale) + "px";
-				cArrow.style.width = (W/nScale) + "px";
-				canvas.style.height = (H/nScale) + "px";
-				canvas.style.width = (W/nScale) + "px";
+				cArrow.style.height = "225px";
+				cArrow.style.width = "270px";
+				canvas.style.height = "225px";
+				canvas.style.width = "270px";
 				canvas.style.opacity = "0.5";
 				drawOverlay(currentF);
 				
@@ -467,6 +458,13 @@
 			}
 
 			function makeMaxKey() {
+				const W = 1080;
+				const H = 900;
+				var a = window.innerWidth;
+				var b = window.innerHeight;
+				var nScale;
+				nScale = 1.1*Math.max(W/a, H/b);
+				
 				// 379 x 252 key images - 2 stacked or side-by-side
 				if (W/a > H/b) { //tall
 					cKey.width = 758;
@@ -514,11 +512,9 @@
 				const H = 900;
 				var a = window.innerWidth;
 				var b = window.innerHeight;
-				
-				var scale;
 				var nScale;
-				scale = 4;
 				nScale = 1.1*Math.max(W/a, H/b);
+				
 				cArrow.style.height = (H/nScale) + "px";
 				cArrow.style.width = (W/nScale) + "px";
 				canvas.style.height = (H/nScale) + "px";
