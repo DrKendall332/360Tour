@@ -381,8 +381,8 @@
 			function minTray() {
 				cKey.style.left = "10px";
 				cKey.style.top = "10px";
-				cKey.style.width = "371px";
-				cKey.style.height = "151px";
+				cKey.style.width = "93px";
+				cKey.style.height = "38px";
 				cKey.style.visibility = "visible";
 				cKey.style.opacity = "0.5";
 				cKey.style.zIndex="102";
@@ -392,7 +392,7 @@
 				// clear resize buttons
 				ctx.clearRect(0, 0, cKey.width, cKey.height);
 				ctx.fillStyle = "#FFFFFF";
-				ctx.fillRect(190, 0, cKey.width, cKey.height);				
+				ctx.fillRect(0, 0, cKey.width, cKey.height);				
 				
 				// right resize button
 				ctx.beginPath();
@@ -424,6 +424,43 @@
 				ctx.fillStyle = "#000000";
 				ctx.font = "30px Times New Roman";
 				ctx.fillText("Maximise", 211, 101);
+			}
+
+
+			function makeInlay() {
+				const W = 1080;
+				const H = 900;
+				var a = window.innerWidth;
+				var b = window.innerHeight;
+				
+				var scale;
+				var nScale;
+				scale = 1.1*Math.max(W/a, H/b);
+				nScale = 4;
+				cArrow.style.height = (H/nScale) + "px";
+				cArrow.style.width = (W/nScale) + "px";
+				canvas.style.height = (H/nScale) + "px";
+				canvas.style.width = (W/nScale) + "px";
+				canvas.style.opacity = "0.5";
+				drawOverlay(currentF);
+			}
+
+			function makeMax() {
+				const W = 1080;
+				const H = 900;
+				var a = window.innerWidth;
+				var b = window.innerHeight;
+				
+				var scale;
+				var nScale;
+				scale = 4;
+				nScale = 1.1*Math.max(W/a, H/b);
+				cArrow.style.height = (H/nScale) + "px";
+				cArrow.style.width = (W/nScale) + "px";
+				canvas.style.height = (H/nScale) + "px";
+				canvas.style.width = (W/nScale) + "px";
+				canvas.style.opacity = "1";
+				drawOverlay(currentF);
 			}
 
 			function radarClick(e) {
@@ -497,6 +534,12 @@
 				cArrow.style.visibility = "visible";
 				cKey.style.visibility = "hidden";
 				cKey.style.zIndex="100";
+				if (e.layerX >47) {
+					makeInlay();
+				}
+				else if (e.layerX <47) {
+					makeMax();
+				}
 			}
 			
 			cArrow.addEventListener('click', function(e) { radarClick(e); }, false);
