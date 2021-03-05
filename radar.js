@@ -225,9 +225,9 @@
 				// clear resize buttons
 				ctx.clearRect(710, 750, canvas.width, canvas.height);
 				ctx.fillStyle = "#FFFFFF";
+				ctx.fillRect(710, 750, canvas.width, canvas.height);
 				
 				// right resize button
-				ctx.fillRect(710, 750, canvas.width, canvas.height);
 				ctx.beginPath();
 				ctx.lineWidth="4";
 				ctx.rect(900,750,179,149);
@@ -377,6 +377,55 @@
 				ctxA.closePath();
 			}
 
+
+			function minTray() {
+				cKey.style.left = "10px";
+				cKey.style.top = "10px";
+				cKey.style.width = "371px";
+				cKey.style.height = "151px";
+				cKey.style.visibility = "visible";
+				cKey.style.opacity = "0.5";
+				cKey.style.zIndex="102";
+				cKey.width=371;
+				cKey.height=151;
+				var ctx = cKey.getContext("2d");				
+				// clear resize buttons
+				ctx.clearRect(0, 0, cKey.width, cKey.height);
+				ctx.fillStyle = "#FFFFFF";
+				ctx.fillRect(190, 0, cKey.width, cKey.height);				
+				
+				// right resize button
+				ctx.beginPath();
+				ctx.lineWidth="4";
+				ctx.rect(191,1,179,149);
+				ctx.stroke();
+				
+				// left resize button
+				ctx.beginPath();
+				ctx.lineWidth="4";
+				ctx.rect(1, 1, 179,149);
+				ctx.stroke();
+				
+				//new style
+				ctx.beginPath();
+				ctx.lineWidth="4";
+				ctx.rect(11,11,39,32);
+				ctx.stroke();
+				ctx.lineWidth="1";
+				ctx.fillStyle = "#000000";
+				ctx.font = "30px Times New Roman";
+				ctx.fillText("Map Overlay", 8, 101);
+				
+				ctx.beginPath();
+				ctx.lineWidth="4";
+				ctx.rect(201,11,159,129);
+				ctx.stroke();
+				ctx.lineWidth="1";
+				ctx.fillStyle = "#000000";
+				ctx.font = "30px Times New Roman";
+				ctx.fillText("Maximise", 211, 101);
+			}
+
 			function radarClick(e) {
 				var X = e.layerX;
 				var Y = e.layerY;
@@ -414,21 +463,7 @@
 				else if (X > parseInt(e.target.style.width)*0.67 && Y > parseInt(e.target.style.height)*0.67) {
 					canvas.style.visibility = "hidden";
 					cArrow.style.visibility = "hidden";
-					cKey.style.left = "10px";
-					cKey.style.top = "10px";
-					cKey.style.width = "270px";
-					cKey.style.height = "20px";
-					cKey.style.visibility = "visible";
-					cKey.style.opacity = "0.5";
-					cKey.style.zIndex="102";
-					cKey.width=270;
-					cKey.height=20;
-					var keyctx = cKey.getContext("2d");
-					keyctx.fillStyle = "#FFFFFF";
-					keyctx.fillRect(0,0,270,20);
-					keyctx.fillStyle = "#000000";
-					keyctx.font = "30px Times New Roman";
-					keyctx.fillText("Show Map", 19, 10);					
+					minTray();									
 				}
 				else if (scale*X>10 && scale*Y>10 && scale*X<189 && scale*Y<60) {
 					currentF = 2;
