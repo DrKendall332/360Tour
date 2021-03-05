@@ -471,8 +471,12 @@
 				if (W/a > H/b) { //tall
 					cKey.width = 758;
 					cKey.height= 252;
-					cKey.style.height= (b - 10 - (H/nScale) - 20) +"px";
-					cKey.style.width= 758/252*(b - 10 - (H/nScale) - 20) +"px";
+					const maxH = (b - 10 - (H/nScale) - 20);
+					const HFromW = (W/nScale)*252/758;
+					var size = Math.min(maxH, HFromW);
+					
+					cKey.style.height= size +"px";
+					cKey.style.width= 758/252*size +"px";
 					cKey.style.top=10+ (H/nScale) +"px";
 					cKey.style.left="10px";
 					
@@ -486,8 +490,12 @@
 				else { //wide
 					cKey.width = 379;
 					cKey.height= 504;
-					cKey.style.width= (a - 10 - (W/nScale)) +"px";
-					cKey.style.height= 504/379*(a - 10 - (W/nScale)) +"px";
+					const maxW = (a - 10 - (W/nScale));
+					const WFromH = (H/nScale)*379/504;
+					var size = Math.min(maxW, WFromH);
+					
+					cKey.style.width= size +"px";
+					cKey.style.height= 504/379*size +"px";
 					cKey.style.top="10px";
 					cKey.style.left=10 + (W/nScale)+"px";
 					
