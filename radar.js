@@ -497,6 +497,7 @@
 					cKey.style.top="10px";
 					cKey.style.left=10 + (W/nScale)+"px";
 					
+					var ctx = cKey.getContext("2d");
 					if (keyImgs[currentF].sl) {
 						ctx.drawImage(keyImgs[currentF].s,0,0);
 					}
