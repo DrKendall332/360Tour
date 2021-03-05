@@ -502,9 +502,10 @@
 						ctx.drawImage(keyImgs[currentF].s,0,0);
 					}
 					if (keyImgs[currentF].nl) {
-						ctx.drawImage(keyImgs[currentF].n,252,0);
+						ctx.drawImage(keyImgs[currentF].n,0,252);
 					}
 				}
+				cKey.style.opacity = "1";
 				cKey.style.visibility="visible";
 			}
 
