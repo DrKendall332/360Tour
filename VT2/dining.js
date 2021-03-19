@@ -38,7 +38,7 @@ var markers = {
 	    height: 32,
 	    tooltip: 'Move to South Block Level 1 Stair',
 	    scale: [1,2],
-	    data: {type: '3Droom', room: 's1-stair', id:'dining', x:0, y:0}
+	    data: {type: '3Droom', room: 's1_stair', id:'dining', x:0, y:0}
   	},
 
 	],
