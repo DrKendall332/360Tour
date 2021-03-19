@@ -47,7 +47,7 @@ var markers = {
 	    image: 'assets/left_arrow.png',
 	    width: 32,
 	    height: 32,
-	    tooltip: 'To Coffee Bar ',
+	    tooltip: 'To Dining Area',
 	    scale: [1,2],
 	    data: {type: '3Droom', room: 'dining', id:'s1_stair', x:0, y:0}
   	},
