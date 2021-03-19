@@ -41,7 +41,7 @@ var markers = {
 	    data: {type: '3Droom', room: 'reception', id:'s1_stair', x:0, y:0}
   	},
 	{
-	    id: 'coffeeBar',
+	    id: 'dining',
 	    y: 1363,
 	    x: 1907,
 	    image: 'assets/left_arrow.png',
@@ -49,7 +49,7 @@ var markers = {
 	    height: 32,
 	    tooltip: 'To Coffee Bar ',
 	    scale: [1,2],
-	    data: {type: '3Droom', room: 'coffeeBar', id:'s1_stair', x:0, y:0}
+	    data: {type: '3Droom', room: 'dining', id:'s1_stair', x:0, y:0}
   	},
 
 	],
