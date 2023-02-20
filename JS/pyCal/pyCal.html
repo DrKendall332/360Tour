@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>PyCal</title>
+  </head>
+  <body>
+<script>
+  var $_GET = {},
+    args = location.search.substr(1).split(/&/);
+for (var i=0; i<args.length; ++i) {
+    var tmp = args[i].split(/=/);
+    if (tmp[0] != "") {
+        $_GET[decodeURIComponent(tmp[0])] = decodeURIComponent(tmp.slice(1).join("").replace("+", " "));
+    }
+}
+  
+  var url = 'http://parrotlets-online.co.uk/cgi-bin/pyCal.cgi' + ;
+  var form = $('<form action="' + url + '" method="get">' +
+  '<input type="text" name="addr" value="' + $_GET{'addr'} + '" />' +
+  '<input type="text" name="pwd" value="' + $_GET{'pwd'} + '" />' +
+  '<input type="text" name="cal" value="' + $_GET{'cal'} + '" />' +
+  '</form>');
+$('body').append(form);
+form.submit();
+</script>
+  </body>
+</html>
