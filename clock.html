@@ -1,0 +1,51 @@
+<html><head><title>Countdown</title></head>
+<body>
+<script>
+function padWithZero(t) {
+	if (t < 10) {
+		return '0' + t
+	}
+	return t
+}
+
+function carrySec(m,s) {
+	if (s>0) {
+		return ((59-m)%5)
+	}
+	return ((59-m)%5)+1
+}
+
+function clockTick() {
+	var d = new Date(); // for now
+	var h = d.getHours(); // => 9
+	var m = d.getMinutes(); // =>  30
+	var s = d.getSeconds(); // => 51
+
+	var time = '' + h + ':' + padWithZero(m)
+	var counter = '' + carrySec(m,s) + ':' + padWithZero((60-s)%60)
+
+	var col = ''
+	if ((m+1)%5 === 0) {
+		col = ' color="red"'
+	}
+	else {
+		col = ''
+	}
+
+	if ((m+1)%5 === 0 && s===59) {
+		document.getElementById('xyz').play();
+	}
+
+	document.getElementById("clock").innerHTML = '<font size=15>'+ time + '</font>'
+	document.getElementById("counter").innerHTML = '<font' + col + ' size=25>Time remaining: ' + counter + '</font>'
+}
+
+
+setInterval(clockTick, 1000);
+</script>
+<audio id="xyz" src="chime.mp3" preload="auto"></audio><center>
+<div id="clock"></div>
+<div id="counter"></div></center>
+
+</body>
+</html>
