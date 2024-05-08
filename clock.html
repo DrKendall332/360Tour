@@ -47,6 +47,16 @@ function padWithZero(t) {
 	return t
 }
 
+
+function hid()	{
+		var h = document.getElementById('mode').style.visibility;
+		if (h == "hidden") {
+			document.getElementById('mode').style.visibility = "visible"
+		}
+		else {
+			document.getElementById('mode').style.visibility = "hidden"
+		}
+	}
 function carrySec(m,s,f) {	
 	if (s>0) {
 		return ((59-m)%f)
@@ -106,6 +116,6 @@ setInterval(clockTick, 1000);
 <input type="radio" name="mod" value=20>20</input>
 <input type="radio" name="mod" value=30>30</input>
 </div>
-<input type="button" name="hide" style="position:absolute;bottom:0;right:0" onclick="(function(){document.getElementById('mode').style.visibility='hidden';})">
+<input type="button" name="hide" style="position:absolute;bottom:0;right:0" onclick="hid()">
 </body>
 </html>
