@@ -8,11 +8,11 @@ function padWithZero(t) {
 	return t
 }
 
-function carrySec(m,s) {
+function carrySec(m,s,f) {	
 	if (s>0) {
-		return ((59-m)%5)
+		return ((59-m)%f)
 	}
-	return ((59-m)%5)+1
+	return ((59-m)%f)+1
 }
 
 function clockTick() {
@@ -21,18 +21,26 @@ function clockTick() {
 	var m = d.getMinutes(); // =>  30
 	var s = d.getSeconds(); // => 51
 
+	var radio = document.getElementsByName("mod")
+	var f = 5;
+	for (i=0; i<radio.length; i++) {
+		if (radio[i].checked) {
+			f = radio[i].value;
+		}
+	}
+
 	var time = '' + h + ':' + padWithZero(m)
-	var counter = '' + carrySec(m,s) + ':' + padWithZero((60-s)%60)
+	var counter = '' + carrySec(m,s,f) + ':' + padWithZero((60-s)%60)
 
 	var col = ''
-	if ((m+1)%5 === 0) {
+	if ((m+1)%f === 0) {
 		col = ' color="red"'
 	}
 	else {
 		col = ''
 	}
 
-	if ((m+1)%5 === 0 && s===59) {
+	if ((m+1)%f === 0 && s===59) {
 		document.getElementById('xyz').play();
 	}
 
@@ -46,6 +54,19 @@ setInterval(clockTick, 1000);
 <audio id="xyz" src="chime.mp3" preload="auto"></audio><center>
 <div id="clock"></div>
 <div id="counter"></div></center>
+<div id="mode" style="position:absolute;bottom:0;left:0">
+<input type="radio" name="mod" value=1>1</input>
+<input type="radio" name="mod" value=2>2</input>
+<input type="radio" name="mod" value=3>3</input>
+<input type="radio" name="mod" value=4>4</input>
+<input type="radio" name="mod" value=5>5</input>
+<input type="radio" name="mod" value=6>6</input>
+<input type="radio" name="mod" value=10>10</input>
+<input type="radio" name="mod" value=12>12</input>
+<input type="radio" name="mod" value=15>15</input>
+<input type="radio" name="mod" value=20>20</input>
+<input type="radio" name="mod" value=30>30</input>
+</div>
 
 </body>
 </html>
