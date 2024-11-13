@@ -34,7 +34,7 @@ var markers = {
 	transition:[{
 	    id: 'HazardsActivity',
 	    y: 1355,
-	    x: 2760,
+	    x: 3760,
 	    image: 'assets/think.png',
 	    width: 32,
 	    height: 32,
