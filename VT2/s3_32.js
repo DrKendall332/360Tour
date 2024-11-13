@@ -21,7 +21,7 @@ var markers = {
 	 {
 	    id: 'MrsShanks',
 	    y: 1355,
-	    x: 0,
+	    x: 2688,
 	    image: 'assets/speech.png',
 	    width: 32,
 	    height: 32,
@@ -34,7 +34,7 @@ var markers = {
 	transition:[{
 	    id: 'HazardsActivity',
 	    y: 1355,
-	    x: 1072,
+	    x: 2760,
 	    image: 'assets/think.png',
 	    width: 32,
 	    height: 32,
