@@ -62,7 +62,7 @@
                 for (let i = 0; i < videoElements.length; i++) {
                     // If you have fewer than 4 cameras, this modulo operator (%) 
                     // loops back to the first camera to ensure all 4 boxes get filled.
-                    const device = videoDevices[i % videoDevices.length];
+                    const device = videoDevices[(1 + i) % videoDevices.length];
 
                     // Request a stream specifically for this device ID
                     const stream = await navigator.mediaDevices.getUserMedia({
