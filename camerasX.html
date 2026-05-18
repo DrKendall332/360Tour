@@ -22,9 +22,9 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            width: 100vh;  /* Matches height to maintain a perfect square layout */
-            height: 100vh; /* Forces the layout to be exactly the height of the screen */
-            gap: 0;        /* Seamless edges prevent vertical overflow/scrolling */
+            width: 100vh;  
+            height: 100vh; 
+            gap: 0;        
         }
 
         /* Container box for each camera slot */
@@ -59,10 +59,41 @@
             border-radius: 4px;
             max-width: 90%;
             cursor: pointer;
+            display: block;
         }
 
         .camera-select:hover {
             background: rgba(30, 30, 30, 0.9);
+        }
+
+        /* Fixed Toggle Button in the bottom-right corner of the screen */
+        .toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100; /* Ensures it stays on top of everything */
+            background: rgba(30, 30, 30, 0.85);
+            color: #fff;
+            border: 1px solid #555;
+            padding: 10px 16px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(60, 60, 60, 0.9);
+        }
+
+        .toggle-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Rule to hide selectors when the toggle state is active */
+        .cross-container.selectors-hidden .camera-select {
+            display: none;
         }
 
         /* Position the 4 boxes in the 3x3 grid */
@@ -71,7 +102,7 @@
         #box-bottom { grid-row: 3; grid-column: 2; }
         #box-left   { grid-row: 2; grid-column: 1; }
 
-        /* Rotate ONLY the video elements so controls stay right-side up */
+        /* Rotations */
         #box-top video    { /* 0 degrees */ }
         #box-right video  { transform: rotate(90deg); }
         #box-bottom video { transform: rotate(180deg); }
@@ -80,7 +111,7 @@
 </head>
 <body>
 
-    <div class="cross-container">
+    <div id="cross-layout" class="cross-container">
         <div id="box-top" class="cam-box">
             <video id="video-0" autoplay playsinline muted></video>
             <select id="select-0" class="camera-select"></select>
@@ -102,6 +133,8 @@
         </div>
     </div>
 
+    <button id="btn-toggle" class="toggle-btn">Hide Selectors</button>
+
     <script>
         const videoElements = [
             document.getElementById('video-0'),
@@ -117,10 +150,17 @@
             document.getElementById('select-3')
         ];
 
+        const crossContainer = document.getElementById('cross-layout');
+        const toggleButton = document.getElementById('btn-toggle');
+
         let activeStreams = [null, null, null, null];
         let availableDevices = [];
+        let menusAreVisible = true;
 
         async function init() {
+            // Set up the toggle button event listener
+            toggleButton.addEventListener('click', toggleDropdowns);
+
             try {
                 await navigator.mediaDevices.getUserMedia({ video: true });
                 const devices = await navigator.mediaDevices.enumerateDevices();
@@ -131,63 +171,4 @@
                     return;
                 }
 
-                selectElements.forEach((selectEl, slotIndex) => {
-                    populateDropdown(selectEl, slotIndex);
-                    selectEl.addEventListener('change', (e) => {
-                        switchCamera(slotIndex, e.target.value);
-                    });
-                });
-
-                for (let i = 0; i < 4; i++) {
-                    const defaultDevice = availableDevices[i % availableDevices.length];
-                    await switchCamera(i, defaultDevice.deviceId);
-                }
-
-            } catch (err) {
-                console.error('Initialization error:', err);
-                alert('Could not access hardware. Ensure you are running this via HTTPS or localhost, and permissions are granted.');
-            }
-        }
-
-        function populateDropdown(selectEl, slotIndex) {
-            availableDevices.forEach((device, devIndex) => {
-                const option = document.createElement('option');
-                option.value = device.deviceId;
-                option.text = device.label || `Camera ${devIndex + 1}`;
-                selectEl.appendChild(option);
-            });
-
-            if (availableDevices.length > 0) {
-                selectEl.selectedIndex = slotIndex % availableDevices.length;
-            }
-        }
-
-        async function switchCamera(slotIndex, deviceId) {
-            if (activeStreams[slotIndex]) {
-                activeStreams[slotIndex].getTracks().forEach(track => track.stop());
-                activeStreams[slotIndex] = null;
-            }
-
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        deviceId: { exact: deviceId },
-                        width: { ideal: 640 },
-                        height: { ideal: 480 },
-                        frameRate: { ideal: 15 } 
-                    }
-                });
-
-                videoElements[slotIndex].srcObject = stream;
-                activeStreams[slotIndex] = stream;
-                selectElements[slotIndex].value = deviceId;
-
-            } catch (err) {
-                console.error(`Error switching slot ${slotIndex}:`, err);
-            }
-        }
-
-        window.addEventListener('load', init);
-    </script>
-</body>
-</html>
+                selectElements.forEach((selectEl
