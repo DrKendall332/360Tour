@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4-Webcam Split Screen</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000; /* Black background like a security monitor */
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 columns */
+            grid-template-rows: 1fr 1fr;    /* 2 rows */
+            height: 100vh;                  /* Full viewport height */
+            overflow: hidden;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures the video fills the quadrant without stretching */
+            border: 1px solid #222;
+            box-sizing: border-box;
+            background-color: #111; /* Dark grey placeholder before video loads */
+        }
+    </style>
+</head>
+<body>
+
+    <video id="cam1" autoplay playsinline muted></video>
+    <video id="cam2" autoplay playsinline muted></video>
+    <video id="cam3" autoplay playsinline muted></video>
+    <video id="cam4" autoplay playsinline muted></video>
+
+    <script>
+        async function startCameras() {
+            const videoElements = [
+                document.getElementById('cam1'),
+                document.getElementById('cam2'),
+                document.getElementById('cam3'),
+                document.getElementById('cam4')
+            ];
+
+            try {
+                // 1. Request initial permission to access media devices
+                // Browsers require user permission before listing actual device details.
+                await navigator.mediaDevices.getUserMedia({ video: true });
+
+                // 2. Enumerate all connected devices
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                
+                // 3. Filter out only the video input devices (webcams)
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+                if (videoDevices.length === 0) {
+                    alert('No webcams found on this device.');
+                    return;
+                }
+
+                // 4. Assign a camera to each video element
+                for (let i = 0; i < videoElements.length; i++) {
+                    // If you have fewer than 4 cameras, this modulo operator (%) 
+                    // loops back to the first camera to ensure all 4 boxes get filled.
+                    const device = videoDevices[i % videoDevices.length];
+
+                    // Request a stream specifically for this device ID
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: { deviceId: { exact: device.deviceId } }
+                    });
+
+                    // Attach the stream to the video tag
+                    videoElements[i].srcObject = stream;
+                }
+
+            } catch (err) {
+                console.error('Error accessing webcams: ', err);
+                alert('Could not access webcams. Please ensure you have granted browser permissions.');
+            }
+        }
+
+        // Initialize when the page loads
+        window.addEventListener('load', startCameras);
+    </script>
+</body>
+</html>
