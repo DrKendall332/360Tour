@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4-Webcam Cross Display</title>
+    <title>Dynamic 4-Webcam Cross Display</title>
     <style>
         body {
             margin: 0;
@@ -17,106 +17,179 @@
             font-family: sans-serif;
         }
 
-        /* 3x3 Grid Container forced to be a perfect square */
+        /* 3x3 Grid Container */
         .cross-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            width: 90vmin;  /* Uses 90% of the smallest screen dimension */
-            height: 90vmin; /* Ensures cells are always perfectly square */
-            gap: 5px;
+            width: 90vmin;  
+            height: 90vmin; 
+            gap: 10px;
+        }
+
+        /* Container box for each camera slot */
+        .cam-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #111;
+            border: 1px solid #333;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
         video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Keeps video filling the square without distortion */
-            background-color: #111;
-            border: 1px solid #333;
-            box-sizing: border-box;
+            object-fit: cover; 
+            background-color: #000;
         }
 
-        /* Position and Rotate each quadrant */
-        #cam-top {
-            grid-row: 1;
-            grid-column: 2;
-            /* 0 degrees - Correct way up */
+        /* Style for the dropdown selectors */
+        .camera-select {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            border: 1px solid #555;
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+            max-width: 90%;
+            cursor: pointer;
         }
 
-        #cam-right {
-            grid-row: 2;
-            grid-column: 3;
-            transform: rotate(90deg); /* Clockwise 90 degrees */
+        .camera-select:hover {
+            background: rgba(30, 30, 30, 0.9);
         }
 
-        #cam-bottom {
-            grid-row: 3;
-            grid-column: 2;
-            transform: rotate(180deg); /* 180 degrees */
-        }
+        /* Position the 4 boxes in the 3x3 grid */
+        #box-top    { grid-row: 1; grid-column: 2; }
+        #box-right  { grid-row: 2; grid-column: 3; }
+        #box-bottom { grid-row: 3; grid-column: 2; }
+        #box-left   { grid-row: 2; grid-column: 1; }
 
-        #cam-left {
-            grid-row: 2;
-            grid-column: 1;
-            transform: rotate(270deg); /* Clockwise 270 degrees */
-        }
+        /* Rotate ONLY the video elements so controls stay right-side up */
+        #box-top video    { /* 0 degrees */ }
+        #box-right video  { transform: rotate(90deg); }
+        #box-bottom video { transform: rotate(180deg); }
+        #box-left video   { transform: rotate(270deg); }
     </style>
 </head>
 <body>
 
     <div class="cross-container">
-        <video id="cam-top" autoplay playsinline muted></video>
-        <video id="cam-right" autoplay playsinline muted></video>
-        <video id="cam-bottom" autoplay playsinline muted></video>
-        <video id="cam-left" autoplay playsinline muted></video>
+        <div id="box-top" class="cam-box">
+            <video id="video-0" autoplay playsinline muted></video>
+            <select id="select-0" class="camera-select"></select>
+        </div>
+
+        <div id="box-right" class="cam-box">
+            <video id="video-1" autoplay playsinline muted></video>
+            <select id="select-1" class="camera-select"></select>
+        </div>
+
+        <div id="box-bottom" class="cam-box">
+            <video id="video-2" autoplay playsinline muted></video>
+            <select id="select-2" class="camera-select"></select>
+        </div>
+
+        <div id="box-left" class="cam-box">
+            <video id="video-3" autoplay playsinline muted></video>
+            <select id="select-3" class="camera-select"></select>
+        </div>
     </div>
 
     <script>
-        async function startCameras() {
-            const videoElements = [
-                document.getElementById('cam-top'),    // Index 0
-                document.getElementById('cam-right'),  // Index 1
-                document.getElementById('cam-bottom'), // Index 2
-                document.getElementById('cam-left')    // Index 3
-            ];
+        // Keep track of active video elements, selectors, and active media streams
+        const videoElements = [
+            document.getElementById('video-0'),
+            document.getElementById('video-1'),
+            document.getElementById('video-2'),
+            document.getElementById('video-3')
+        ];
 
+        const selectElements = [
+            document.getElementById('select-0'),
+            document.getElementById('select-1'),
+            document.getElementById('select-2'),
+            document.getElementById('select-3')
+        ];
+
+        let activeStreams = [null, null, null, null];
+        let availableDevices = [];
+
+        // Main function to initialize everything
+        async function init() {
             try {
-                // Request initial permission
+                // 1. Trigger initial permission prompt
                 await navigator.mediaDevices.getUserMedia({ video: true });
 
-                // Get all available media devices
+                // 2. Fetch all connected video devices
                 const devices = await navigator.mediaDevices.enumerateDevices();
-                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                availableDevices = devices.filter(device => device.kind === 'videoinput');
 
-                if (videoDevices.length === 0) {
+                if (availableDevices.length === 0) {
                     alert('No webcams detected.');
                     return;
                 }
 
-                // Loop through our 4 video slots
-                for (let i = 0; i < videoElements.length; i++) {
-                    const device = videoDevices[i % videoDevices.length];
-
-                    // Request stream with specific hardware bandwidth-saving constraints
-                    const stream = await navigator.mediaDevices.getUserMedia({
-                        video: { 
-                            deviceId: { exact: device.deviceId },
-                            width: { ideal: 640 },
-                            height: { ideal: 480 },
-                            frameRate: { ideal: 15 } // Lower frame rate preserves USB bus bandwidth
-                        }
+                // 3. Populate options and set up event listeners for all 4 selectors
+                selectElements.forEach((selectEl, slotIndex) => {
+                    populateDropdown(selectEl, slotIndex);
+                    
+                    // Add change listener to swap cameras dynamically
+                    selectEl.addEventListener('change', (e) => {
+                        const targetDeviceId = e.target.value;
+                        switchCamera(slotIndex, targetDeviceId);
                     });
+                });
 
-                    videoElements[i].srcObject = stream;
+                // 4. Start the initial streams sequentially
+                for (let i = 0; i < 4; i++) {
+                    // Loop back around if fewer than 4 hardware devices are plugged in
+                    const defaultDevice = availableDevices[i % availableDevices.length];
+                    await switchCamera(i, defaultDevice.deviceId);
                 }
 
             } catch (err) {
-                console.error('Error binding camera streams: ', err);
-                alert('Could not access webcams. Please check permissions and ensure connections are secure (HTTPS/Localhost).');
+                console.error('Initialization error:', err);
+                alert('Could not access hardware. Ensure you are running this via HTTPS or localhost, and permissions are granted.');
             }
         }
 
-        window.addEventListener('load', startCameras);
-    </script>
-</body>
-</html>
+        // Fills a dropdown menu with all available hardware options
+        function populateDropdown(selectEl, slotIndex) {
+            availableDevices.forEach((device, devIndex) => {
+                const option = document.createElement('option');
+                option.value = device.deviceId;
+                // Fallback text if the browser hides labels for privacy before selection
+                option.text = device.label || `Camera ${devIndex + 1}`;
+                selectEl.appendChild(option);
+            });
+
+            // Set the initial dropdown selection index based on the slot layout
+            if (availableDevices.length > 0) {
+                selectEl.selectedIndex = slotIndex % availableDevices.length;
+            }
+        }
+
+        // Handles safely stopping an old stream and spinning up a new one
+        async function switchCamera(slotIndex, deviceId) {
+            // Stop the existing stream running in this slot if there is one
+            if (activeStreams[slotIndex]) {
+                activeStreams[slotIndex].getTracks().forEach(track => track.stop());
+                activeStreams[slotIndex] = null;
+            }
+
+            try {
+                // Fetch the new stream with strict bandwidth constraints
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        deviceId: { exact: deviceId },
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        frameRate: { ideal: 15 } // Keeps the
