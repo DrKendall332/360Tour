@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic 4-Webcam Cross Display</title>
+    <title>Fullscreen 4-Webcam Cross Display</title>
     <style>
         body {
             margin: 0;
@@ -17,14 +17,14 @@
             font-family: sans-serif;
         }
 
-        /* 3x3 Grid Container */
+        /* 3x3 Grid Container locked to full screen height */
         .cross-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            width: 90vmin;  
-            height: 90vmin; 
-            gap: 10px;
+            width: 100vh;  /* Matches height to maintain a perfect square layout */
+            height: 100vh; /* Forces the layout to be exactly the height of the screen */
+            gap: 0;        /* Seamless edges prevent vertical overflow/scrolling */
         }
 
         /* Container box for each camera slot */
@@ -33,7 +33,6 @@
             width: 100%;
             height: 100%;
             background-color: #111;
-            border: 1px solid #333;
             box-sizing: border-box;
             overflow: hidden;
         }
@@ -104,7 +103,6 @@
     </div>
 
     <script>
-        // Keep track of active video elements, selectors, and active media streams
         const videoElements = [
             document.getElementById('video-0'),
             document.getElementById('video-1'),
@@ -122,13 +120,9 @@
         let activeStreams = [null, null, null, null];
         let availableDevices = [];
 
-        // Main function to initialize everything
         async function init() {
             try {
-                // 1. Trigger initial permission prompt
                 await navigator.mediaDevices.getUserMedia({ video: true });
-
-                // 2. Fetch all connected video devices
                 const devices = await navigator.mediaDevices.enumerateDevices();
                 availableDevices = devices.filter(device => device.kind === 'videoinput');
 
@@ -137,20 +131,14 @@
                     return;
                 }
 
-                // 3. Populate options and set up event listeners for all 4 selectors
                 selectElements.forEach((selectEl, slotIndex) => {
                     populateDropdown(selectEl, slotIndex);
-                    
-                    // Add change listener to swap cameras dynamically
                     selectEl.addEventListener('change', (e) => {
-                        const targetDeviceId = e.target.value;
-                        switchCamera(slotIndex, targetDeviceId);
+                        switchCamera(slotIndex, e.target.value);
                     });
                 });
 
-                // 4. Start the initial streams sequentially
                 for (let i = 0; i < 4; i++) {
-                    // Loop back around if fewer than 4 hardware devices are plugged in
                     const defaultDevice = availableDevices[i % availableDevices.length];
                     await switchCamera(i, defaultDevice.deviceId);
                 }
@@ -161,35 +149,45 @@
             }
         }
 
-        // Fills a dropdown menu with all available hardware options
         function populateDropdown(selectEl, slotIndex) {
             availableDevices.forEach((device, devIndex) => {
                 const option = document.createElement('option');
                 option.value = device.deviceId;
-                // Fallback text if the browser hides labels for privacy before selection
                 option.text = device.label || `Camera ${devIndex + 1}`;
                 selectEl.appendChild(option);
             });
 
-            // Set the initial dropdown selection index based on the slot layout
             if (availableDevices.length > 0) {
                 selectEl.selectedIndex = slotIndex % availableDevices.length;
             }
         }
 
-        // Handles safely stopping an old stream and spinning up a new one
         async function switchCamera(slotIndex, deviceId) {
-            // Stop the existing stream running in this slot if there is one
             if (activeStreams[slotIndex]) {
                 activeStreams[slotIndex].getTracks().forEach(track => track.stop());
                 activeStreams[slotIndex] = null;
             }
 
             try {
-                // Fetch the new stream with strict bandwidth constraints
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         deviceId: { exact: deviceId },
                         width: { ideal: 640 },
                         height: { ideal: 480 },
-                        frameRate: { ideal: 15 } // Keeps the
+                        frameRate: { ideal: 15 } 
+                    }
+                });
+
+                videoElements[slotIndex].srcObject = stream;
+                activeStreams[slotIndex] = stream;
+                selectElements[slotIndex].value = deviceId;
+
+            } catch (err) {
+                console.error(`Error switching slot ${slotIndex}:`, err);
+            }
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
