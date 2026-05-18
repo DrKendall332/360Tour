@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4-Webcam Cross Display</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: sans-serif;
+        }
+
+        /* 3x3 Grid Container forced to be a perfect square */
+        .cross-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            width: 90vmin;  /* Uses 90% of the smallest screen dimension */
+            height: 90vmin; /* Ensures cells are always perfectly square */
+            gap: 5px;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Keeps video filling the square without distortion */
+            background-color: #111;
+            border: 1px solid #333;
+            box-sizing: border-box;
+        }
+
+        /* Position and Rotate each quadrant */
+        #cam-top {
+            grid-row: 1;
+            grid-column: 2;
+            /* 0 degrees - Correct way up */
+        }
+
+        #cam-right {
+            grid-row: 2;
+            grid-column: 3;
+            transform: rotate(90deg); /* Clockwise 90 degrees */
+        }
+
+        #cam-bottom {
+            grid-row: 3;
+            grid-column: 2;
+            transform: rotate(180deg); /* 180 degrees */
+        }
+
+        #cam-left {
+            grid-row: 2;
+            grid-column: 1;
+            transform: rotate(270deg); /* Clockwise 270 degrees */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cross-container">
+        <video id="cam-top" autoplay playsinline muted></video>
+        <video id="cam-right" autoplay playsinline muted></video>
+        <video id="cam-bottom" autoplay playsinline muted></video>
+        <video id="cam-left" autoplay playsinline muted></video>
+    </div>
+
+    <script>
+        async function startCameras() {
+            const videoElements = [
+                document.getElementById('cam-top'),    // Index 0
+                document.getElementById('cam-right'),  // Index 1
+                document.getElementById('cam-bottom'), // Index 2
+                document.getElementById('cam-left')    // Index 3
+            ];
+
+            try {
+                // Request initial permission
+                await navigator.mediaDevices.getUserMedia({ video: true });
+
+                // Get all available media devices
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+                if (videoDevices.length === 0) {
+                    alert('No webcams detected.');
+                    return;
+                }
+
+                // Loop through our 4 video slots
+                for (let i = 0; i < videoElements.length; i++) {
+                    const device = videoDevices[i % videoDevices.length];
+
+                    // Request stream with specific hardware bandwidth-saving constraints
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: { 
+                            deviceId: { exact: device.deviceId },
+                            width: { ideal: 640 },
+                            height: { ideal: 480 },
+                            frameRate: { ideal: 15 } // Lower frame rate preserves USB bus bandwidth
+                        }
+                    });
+
+                    videoElements[i].srcObject = stream;
+                }
+
+            } catch (err) {
+                console.error('Error binding camera streams: ', err);
+                alert('Could not access webcams. Please check permissions and ensure connections are secure (HTTPS/Localhost).');
+            }
+        }
+
+        window.addEventListener('load', startCameras);
+    </script>
+</body>
+</html>
