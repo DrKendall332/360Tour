@@ -109,6 +109,10 @@
 <body>
 
     <input type="range" style="position:fixed; bottom:20px; left:20px" id="threshold_slider" min="0" max="255">
+    <input type="range" style="position:fixed; bottom:20px; left:20px" id="R_slider" min="0" max="255">
+    <input type="range" style="position:fixed; bottom:20px; left:20px" id="G_slider" min="0" max="255">
+    <input type="range" style="position:fixed; bottom:20px; left:20px" id="B_slider" min="0" max="255">
+    
     <div id="cross-layout" class="cross-container">
         <div id="box-top" class="cam-box">
             <video id="video-0" autoplay playsinline muted></video>
@@ -218,10 +222,14 @@
                         const g = frameData.data[i + 1];
                         const b = frameData.data[i + 2];
 
+                        const dr = document.getElementById("R_slider").value;
+                        const dg = document.getElementById("G_slider").value;
+                        const db = document.getElementById("B_slider").value;
+                        
                         const colorDistance = Math.sqrt(
-                            Math.pow(r - TARGET_R, 2) +
-                            Math.pow(g - TARGET_G, 2) +
-                            Math.pow(b - TARGET_B, 2)
+                            Math.pow(r - dr, 2) +
+                            Math.pow(g - dg, 2) +
+                            Math.pow(b - db, 2)
                         );
                         const thresh_slider = document.getElementById("threshold_slider").value;
                         // If color matches backdrop matrix, turn pixel into opaque solid black.
@@ -277,6 +285,18 @@
             menusAreVisible = !menusAreVisible;
             crossContainer.classList.toggle('selectors-hidden', !menusAreVisible);
             toggleButton.textContent = menusAreVisible ? "Hide Selectors" : "Show Selectors";
+
+            if(document.getElementById("threshold_slider").style.visibility==="hidden") {
+                document.getElementById("threshold_slider").style.visibility="visible"
+                document.getElementById("R_slider").style.visibility="visible"
+                document.getElementById("G_slider").style.visibility="visible"
+                document.getElementById("B_slider").style.visibility="visible"
+            } else {
+                document.getElementById("threshold_slider").style.visibility="hidden"
+                document.getElementById("R_slider").style.visibility="hidden"
+                document.getElementById("G_slider").style.visibility="hidden"
+                document.getElementById("B_slider").style.visibility="hidden"
+            }
         }
 
         function populateDropdown(selectEl, slotIndex) {
