@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resilient AI Background Removal Cross Display</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
-    
+    <title>CSP-Compliant Chroma Key Cross Display</title>
     <style>
         body {
             margin: 0;
@@ -30,12 +27,11 @@
             gap: 0;        
         }
 
-        /* Container box for each camera slot */
         .cam-box {
             position: relative;
             width: 100%;
             height: 100%;
-            background-color: #000; 
+            background-color: #000; /* Replaced pixels turn into this true black */
             box-sizing: border-box;
             overflow: hidden;
         }
@@ -47,7 +43,6 @@
             background-color: #000;
         }
 
-        /* Style for the dropdown selectors */
         .camera-select {
             position: absolute;
             bottom: 8px;
@@ -65,11 +60,6 @@
             display: block;
         }
 
-        .camera-select:hover {
-            background: rgba(30, 30, 30, 0.9);
-        }
-
-        /* Fixed Toggle Button in the bottom-right corner */
         .toggle-btn {
             position: fixed;
             bottom: 20px;
@@ -82,30 +72,19 @@
             font-size: 14px;
             border-radius: 6px;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: background 0.2s, transform 0.1s;
-        }
-
-        .toggle-btn:hover {
-            background: rgba(60, 60, 60, 0.9);
-        }
-
-        .toggle-btn:active {
-            transform: scale(0.95);
         }
 
         .cross-container.selectors-hidden .camera-select {
             display: none;
         }
 
-        /* Grid Map Positions */
+        /* Positions and Rotations */
         #box-top    { grid-row: 1; grid-column: 2; }
         #box-right  { grid-row: 2; grid-column: 3; }
         #box-bottom { grid-row: 3; grid-column: 2; }
         #box-left   { grid-row: 2; grid-column: 1; }
 
-        /* Rotations */
-        #box-top canvas    { /* 0 degrees */ }
+        #box-top canvas    { }
         #box-right canvas  { transform: rotate(90deg); }
         #box-bottom canvas { transform: rotate(180deg); }
         #box-left canvas   { transform: rotate(270deg); }
@@ -118,17 +97,14 @@
             <canvas id="canvas-0"></canvas>
             <select id="select-0" class="camera-select"></select>
         </div>
-
         <div id="box-right" class="cam-box">
             <canvas id="canvas-1"></canvas>
             <select id="select-1" class="camera-select"></select>
         </div>
-
         <div id="box-bottom" class="cam-box">
             <canvas id="canvas-2"></canvas>
             <select id="select-2" class="camera-select"></select>
         </div>
-
         <div id="box-left" class="cam-box">
             <canvas id="canvas-3"></canvas>
             <select id="select-3" class="camera-select"></select>
@@ -146,42 +122,39 @@
 
     <script>
         const videoElements = [
-            document.getElementById('video-0'),
-            document.getElementById('video-1'),
-            document.getElementById('video-2'),
-            document.getElementById('video-3')
+            document.getElementById('video-0'), document.getElementById('video-1'),
+            document.getElementById('video-2'), document.getElementById('video-3')
         ];
 
         const canvasElements = [
-            document.getElementById('canvas-0'),
-            document.getElementById('canvas-1'),
-            document.getElementById('canvas-2'),
-            document.getElementById('canvas-3')
+            document.getElementById('canvas-0'), document.getElementById('canvas-1'),
+            document.getElementById('canvas-2'), document.getElementById('canvas-3')
         ];
 
         const selectElements = [
-            document.getElementById('select-0'),
-            document.getElementById('select-1'),
-            document.getElementById('select-2'),
-            document.getElementById('select-3')
+            document.getElementById('select-0'), document.getElementById('select-1'),
+            document.getElementById('select-2'), document.getElementById('select-3')
         ];
 
         const crossContainer = document.getElementById('cross-layout');
         const toggleButton = document.getElementById('btn-toggle');
 
         let availableDevices = [];
-        let menusAreVisible = true;
-
-        // Global cache to keep track of active hardware streams by deviceId
-        // This stops us from hitting the hardware twice for the same camera
         let hardwareStreamCache = {}; 
         let slotCurrentDeviceIds = [null, null, null, null];
+        let menusAreVisible = true;
+
+        // CHROMA KEY TARGET CONFIGURATION
+        // Change these values to match your specific background color
+        const TARGET_R = 0;   // Pure Green Screen Default
+        const TARGET_G = 255; 
+        const TARGET_B = 0;   
+        const THRESHOLD = 110; // Higher = removes more similar colors, Lower = strict match
 
         async function init() {
             toggleButton.addEventListener('click', toggleDropdowns);
 
             try {
-                // Trigger initial permission block
                 await navigator.mediaDevices.getUserMedia({ video: true });
                 const devices = await navigator.mediaDevices.enumerateDevices();
                 availableDevices = devices.filter(device => device.kind === 'videoinput');
@@ -198,98 +171,89 @@
                     });
                 });
 
-                // Initialize the independent background segmenters
+                // Spin up code-based keying filters for each frame
                 for (let i = 0; i < 4; i++) {
-                    setupAISegmentation(i);
+                    startChromaKeyLoop(i);
                     const defaultDevice = availableDevices[i % availableDevices.length];
                     await switchCamera(i, defaultDevice.deviceId);
                 }
 
             } catch (err) {
-                console.error('Initialization error:', err);
-                alert('Could not access video devices. Make sure you are running via HTTPS/localhost and permissions are clear.');
+                console.error('Init error:', err);
             }
         }
 
-        function setupAISegmentation(slotIndex) {
+        // Pure JS processing loop—completely evades CSP block
+        function startChromaKeyLoop(slotIndex) {
             const videoEl = videoElements[slotIndex];
             const canvasEl = canvasElements[slotIndex];
-            const canvasCtx = canvasEl.getContext('2d');
+            const ctx = canvasEl.getContext('2d', { willReadFrequently: true });
 
             canvasEl.width = 640;
             canvasEl.height = 480;
 
-            const selfieSegmentation = new SelfieSegmentation({
-                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`
-            });
+            function processFrame() {
+                if (videoEl.readyState >= 2) {
+                    // 1. Draw raw video onto our canvas context
+                    ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
 
-            selfieSegmentation.setOptions({
-                modelSelection: 1 // Optimized landscape mode
-            });
+                    // 2. Extract raw RGBA pixel array from the viewport
+                    const frameData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+                    const length = frameData.data.length;
 
-            selfieSegmentation.onResults((results) => {
-                canvasCtx.save();
-                canvasCtx.clearRect(0, 0, canvasEl.width, canvasEl.height);
-                canvasCtx.drawImage(results.segmentationMask, 0, 0, canvasEl.width, canvasEl.height);
-                canvasCtx.globalCompositeOperation = 'source-in';
-                canvasCtx.drawImage(results.image, 0, 0, canvasEl.width, canvasEl.height);
-                canvasCtx.restore();
-            });
+                    // 3. Step through pixels 4 bytes at a time (R, G, B, Alpha)
+                    for (let i = 0; i < length; i += 4) {
+                        const r = frameData.data[i];
+                        const g = frameData.data[i + 1];
+                        const b = frameData.data[i + 2];
 
-            let lastExecutionTime = 0;
-            const targetThrottleInterval = 1000 / 15; // 15 FPS execution floor
+                        // Calculate mathematical distance from target color
+                        const colorDistance = Math.sqrt(
+                            Math.pow(r - TARGET_R, 2) +
+                            Math.pow(g - TARGET_G, 2) +
+                            Math.pow(b - TARGET_B, 2)
+                        );
 
-            async function loopExecution(timestamp) {
-                if (videoEl.readyState >= 2 && (timestamp - lastExecutionTime >= targetThrottleInterval)) {
-                    lastExecutionTime = timestamp;
-                    await selfieSegmentation.send({ image: videoEl });
+                        // If pixel is within threshold, make it transparent (revealing black background)
+                        if (colorDistance < THRESHOLD) {
+                            frameData.data[i + 3] = 0; // Alpha = 0
+                        }
+                    }
+
+                    // 4. Overwrite frame with keyed out data
+                    ctx.putImageData(frameData, 0, 0);
                 }
-                requestAnimationFrame(loopExecution);
+                requestAnimationFrame(processFrame);
             }
-            requestAnimationFrame(loopExecution);
+            requestAnimationFrame(processFrame);
         }
 
         async function switchCamera(slotIndex, deviceId) {
-            // Disconnect current slot's assignment
             videoElements[slotIndex].srcObject = null;
             slotCurrentDeviceIds[slotIndex] = null;
-
-            // Run a clean-up sweep: if a hardware stream is no longer used by ANY slot, shut it down entirely
             cleanUnusedHardwareStreams();
 
             try {
                 let streamToUse = null;
-
-                // If this hardware device is already open elsewhere, use a software clone!
                 if (hardwareStreamCache[deviceId]) {
                     streamToUse = hardwareStreamCache[deviceId].clone();
                 } else {
-                    // Otherwise, request a new hardware stream with ultra-relaxed, safe parameters
                     streamToUse = await navigator.mediaDevices.getUserMedia({
-                        video: {
-                            deviceId: deviceId, // No exact constraint: safe and compliant layout fallbacks
-                            width: { ideal: 640 },
-                            height: { ideal: 480 }
-                        }
+                        video: { deviceId: deviceId, width: { ideal: 640 }, height: { ideal: 480 } }
                     });
-                    // Save the base stream to our cache
                     hardwareStreamCache[deviceId] = streamToUse;
                 }
-
-                // Bind stream to this slot
                 videoElements[slotIndex].srcObject = streamToUse;
                 slotCurrentDeviceIds[slotIndex] = deviceId;
                 selectElements[slotIndex].value = deviceId;
-
             } catch (err) {
-                console.error(`Resilient fallback triggered. Error mapping slot ${slotIndex}:`, err);
+                console.error(err);
             }
         }
 
         function cleanUnusedHardwareStreams() {
             Object.keys(hardwareStreamCache).forEach(id => {
-                const isStillInUse = slotCurrentDeviceIds.includes(id);
-                if (!isStillInUse && hardwareStreamCache[id]) {
+                if (!slotCurrentDeviceIds.includes(id) && hardwareStreamCache[id]) {
                     hardwareStreamCache[id].getTracks().forEach(track => track.stop());
                     delete hardwareStreamCache[id];
                 }
@@ -298,13 +262,8 @@
 
         function toggleDropdowns() {
             menusAreVisible = !menusAreVisible;
-            if (menusAreVisible) {
-                crossContainer.classList.remove('selectors-hidden');
-                toggleButton.textContent = "Hide Selectors";
-            } else {
-                crossContainer.classList.add('selectors-hidden');
-                toggleButton.textContent = "Show Selectors";
-            }
+            crossContainer.classList.toggle('selectors-hidden', !menusAreVisible);
+            toggleButton.textContent = menusAreVisible ? "Hide Selectors" : "Show Selectors";
         }
 
         function populateDropdown(selectEl, slotIndex) {
@@ -314,10 +273,7 @@
                 option.text = device.label || `Camera ${devIndex + 1}`;
                 selectEl.appendChild(option);
             });
-
-            if (availableDevices.length > 0) {
-                selectEl.selectedIndex = slotIndex % availableDevices.length;
-            }
+            if (availableDevices.length > 0) selectEl.selectedIndex = slotIndex % availableDevices.length;
         }
 
         window.addEventListener('load', init);
