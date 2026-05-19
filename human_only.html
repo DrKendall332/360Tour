@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSP-Compliant Chroma Key Cross Display</title>
+    <title>Layer-Stabilized Chroma Key Cross Display</title>
     <style>
         body {
             margin: 0;
@@ -31,15 +31,31 @@
             position: relative;
             width: 100%;
             height: 100%;
-            background-color: #000; /* Replaced pixels turn into this true black */
+            background-color: #000; 
             box-sizing: border-box;
             overflow: hidden;
         }
 
-        canvas {
+        /* The raw video stream sits directly in the layout flow so the browser renders it */
+        .cam-box video {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; 
+            object-fit: cover;
+            z-index: 1; /* Behind the canvas */
+        }
+
+        /* The canvas sits directly on top, completely blocking the video out of sight */
+        .cam-box canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2; /* In front of the video */
             background-color: #000;
         }
 
@@ -48,7 +64,7 @@
             bottom: 8px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 10;
+            z-index: 10; /* Highest layer index to stay interactable */
             background: rgba(0, 0, 0, 0.75);
             color: #fff;
             border: 1px solid #555;
@@ -78,7 +94,7 @@
             display: none;
         }
 
-        /* Positions and Rotations */
+        /* Positions and Rotations (Applied to the canvas layer only) */
         #box-top    { grid-row: 1; grid-column: 2; }
         #box-right  { grid-row: 2; grid-column: 3; }
         #box-bottom { grid-row: 3; grid-column: 2; }
@@ -94,28 +110,28 @@
 
     <div id="cross-layout" class="cross-container">
         <div id="box-top" class="cam-box">
+            <video id="video-0" autoplay playsinline muted></video>
             <canvas id="canvas-0"></canvas>
             <select id="select-0" class="camera-select"></select>
         </div>
+
         <div id="box-right" class="cam-box">
+            <video id="video-1" autoplay playsinline muted></video>
             <canvas id="canvas-1"></canvas>
             <select id="select-1" class="camera-select"></select>
         </div>
+
         <div id="box-bottom" class="cam-box">
+            <video id="video-2" autoplay playsinline muted></video>
             <canvas id="canvas-2"></canvas>
             <select id="select-2" class="camera-select"></select>
         </div>
+
         <div id="box-left" class="cam-box">
+            <video id="video-3" autoplay playsinline muted></video>
             <canvas id="canvas-3"></canvas>
             <select id="select-3" class="camera-select"></select>
         </div>
-    </div>
-
-    <div style="position: fixed; left: -100vw;">
-        <video id="video-0" autoplay playsinline muted></video>
-        <video id="video-1" autoplay playsinline muted></video>
-        <video id="video-2" autoplay playsinline muted></video>
-        <video id="video-3" autoplay playsinline muted></video>
     </div>
 
     <button id="btn-toggle" class="toggle-btn">Hide Selectors</button>
@@ -145,11 +161,10 @@
         let menusAreVisible = true;
 
         // CHROMA KEY TARGET CONFIGURATION
-        // Change these values to match your specific background color
         const TARGET_R = 0;   // Pure Green Screen Default
         const TARGET_G = 255; 
         const TARGET_B = 0;   
-        const THRESHOLD = 110; // Higher = removes more similar colors, Lower = strict match
+        const THRESHOLD = 110; 
 
         async function init() {
             toggleButton.addEventListener('click', toggleDropdowns);
@@ -171,7 +186,6 @@
                     });
                 });
 
-                // Spin up code-based keying filters for each frame
                 for (let i = 0; i < 4; i++) {
                     startChromaKeyLoop(i);
                     const defaultDevice = availableDevices[i % availableDevices.length];
@@ -183,7 +197,6 @@
             }
         }
 
-        // Pure JS processing loop—completely evades CSP block
         function startChromaKeyLoop(slotIndex) {
             const videoEl = videoElements[slotIndex];
             const canvasEl = canvasElements[slotIndex];
@@ -194,33 +207,32 @@
 
             function processFrame() {
                 if (videoEl.readyState >= 2) {
-                    // 1. Draw raw video onto our canvas context
                     ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
 
-                    // 2. Extract raw RGBA pixel array from the viewport
                     const frameData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
                     const length = frameData.data.length;
 
-                    // 3. Step through pixels 4 bytes at a time (R, G, B, Alpha)
                     for (let i = 0; i < length; i += 4) {
                         const r = frameData.data[i];
                         const g = frameData.data[i + 1];
                         const b = frameData.data[i + 2];
 
-                        // Calculate mathematical distance from target color
                         const colorDistance = Math.sqrt(
                             Math.pow(r - TARGET_R, 2) +
                             Math.pow(g - TARGET_G, 2) +
                             Math.pow(b - TARGET_B, 2)
                         );
 
-                        // If pixel is within threshold, make it transparent (revealing black background)
+                        // If color matches backdrop matrix, turn pixel into opaque solid black.
+                        // This prevents the raw video playing right underneath from leaking through.
                         if (colorDistance < THRESHOLD) {
-                            frameData.data[i + 3] = 0; // Alpha = 0
+                            frameData.data[i] = 0;     // Red
+                            frameData.data[i + 1] = 0; // Green
+                            frameData.data[i + 2] = 0; // Blue
+                            frameData.data[i + 3] = 255; // Alpha (Fully Opaque)
                         }
                     }
 
-                    // 4. Overwrite frame with keyed out data
                     ctx.putImageData(frameData, 0, 0);
                 }
                 requestAnimationFrame(processFrame);
