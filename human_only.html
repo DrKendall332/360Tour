@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resilient AI Background Removal Cross Display</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: sans-serif;
+        }
+
+        /* 3x3 Grid Container locked to full screen height */
+        .cross-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            width: 100vh;  
+            height: 100vh; 
+            gap: 0;        
+        }
+
+        /* Container box for each camera slot */
+        .cam-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #000; 
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            background-color: #000;
+        }
+
+        /* Style for the dropdown selectors */
+        .camera-select {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            border: 1px solid #555;
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+            max-width: 90%;
+            cursor: pointer;
+            display: block;
+        }
+
+        .camera-select:hover {
+            background: rgba(30, 30, 30, 0.9);
+        }
+
+        /* Fixed Toggle Button in the bottom-right corner */
+        .toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(30, 30, 30, 0.85);
+            color: #fff;
+            border: 1px solid #555;
+            padding: 10px 16px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(60, 60, 60, 0.9);
+        }
+
+        .toggle-btn:active {
+            transform: scale(0.95);
+        }
+
+        .cross-container.selectors-hidden .camera-select {
+            display: none;
+        }
+
+        /* Grid Map Positions */
+        #box-top    { grid-row: 1; grid-column: 2; }
+        #box-right  { grid-row: 2; grid-column: 3; }
+        #box-bottom { grid-row: 3; grid-column: 2; }
+        #box-left   { grid-row: 2; grid-column: 1; }
+
+        /* Rotations */
+        #box-top canvas    { /* 0 degrees */ }
+        #box-right canvas  { transform: rotate(90deg); }
+        #box-bottom canvas { transform: rotate(180deg); }
+        #box-left canvas   { transform: rotate(270deg); }
+    </style>
+</head>
+<body>
+
+    <div id="cross-layout" class="cross-container">
+        <div id="box-top" class="cam-box">
+            <canvas id="canvas-0"></canvas>
+            <select id="select-0" class="camera-select"></select>
+        </div>
+
+        <div id="box-right" class="cam-box">
+            <canvas id="canvas-1"></canvas>
+            <select id="select-1" class="camera-select"></select>
+        </div>
+
+        <div id="box-bottom" class="cam-box">
+            <canvas id="canvas-2"></canvas>
+            <select id="select-2" class="camera-select"></select>
+        </div>
+
+        <div id="box-left" class="cam-box">
+            <canvas id="canvas-3"></canvas>
+            <select id="select-3" class="camera-select"></select>
+        </div>
+    </div>
+
+    <div style="display: none;">
+        <video id="video-0" autoplay playsinline muted></video>
+        <video id="video-1" autoplay playsinline muted></video>
+        <video id="video-2" autoplay playsinline muted></video>
+        <video id="video-3" autoplay playsinline muted></video>
+    </div>
+
+    <button id="btn-toggle" class="toggle-btn">Hide Selectors</button>
+
+    <script>
+        const videoElements = [
+            document.getElementById('video-0'),
+            document.getElementById('video-1'),
+            document.getElementById('video-2'),
+            document.getElementById('video-3')
+        ];
+
+        const canvasElements = [
+            document.getElementById('canvas-0'),
+            document.getElementById('canvas-1'),
+            document.getElementById('canvas-2'),
+            document.getElementById('canvas-3')
+        ];
+
+        const selectElements = [
+            document.getElementById('select-0'),
+            document.getElementById('select-1'),
+            document.getElementById('select-2'),
+            document.getElementById('select-3')
+        ];
+
+        const crossContainer = document.getElementById('cross-layout');
+        const toggleButton = document.getElementById('btn-toggle');
+
+        let availableDevices = [];
+        let menusAreVisible = true;
+
+        // Global cache to keep track of active hardware streams by deviceId
+        // This stops us from hitting the hardware twice for the same camera
+        let hardwareStreamCache = {}; 
+        let slotCurrentDeviceIds = [null, null, null, null];
+
+        async function init() {
+            toggleButton.addEventListener('click', toggleDropdowns);
+
+            try {
+                // Trigger initial permission block
+                await navigator.mediaDevices.getUserMedia({ video: true });
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                availableDevices = devices.filter(device => device.kind === 'videoinput');
+
+                if (availableDevices.length === 0) {
+                    alert('No webcams detected.');
+                    return;
+                }
+
+                selectElements.forEach((selectEl, slotIndex) => {
+                    populateDropdown(selectEl, slotIndex);
+                    selectEl.addEventListener('change', (e) => {
+                        switchCamera(slotIndex, e.target.value);
+                    });
+                });
+
+                // Initialize the independent background segmenters
+                for (let i = 0; i < 4; i++) {
+                    setupAISegmentation(i);
+                    const defaultDevice = availableDevices[i % availableDevices.length];
+                    await switchCamera(i, defaultDevice.deviceId);
+                }
+
+            } catch (err) {
+                console.error('Initialization error:', err);
+                alert('Could not access video devices. Make sure you are running via HTTPS/localhost and permissions are clear.');
+            }
+        }
+
+        function setupAISegmentation(slotIndex) {
+            const videoEl = videoElements[slotIndex];
+            const canvasEl = canvasElements[slotIndex];
+            const canvasCtx = canvasEl.getContext('2d');
+
+            canvasEl.width = 640;
+            canvasEl.height = 480;
+
+            const selfieSegmentation = new SelfieSegmentation({
+                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`
+            });
+
+            selfieSegmentation.setOptions({
+                modelSelection: 1 // Optimized landscape mode
+            });
+
+            selfieSegmentation.onResults((results) => {
+                canvasCtx.save();
+                canvasCtx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+                canvasCtx.drawImage(results.segmentationMask, 0, 0, canvasEl.width, canvasEl.height);
+                canvasCtx.globalCompositeOperation = 'source-in';
+                canvasCtx.drawImage(results.image, 0, 0, canvasEl.width, canvasEl.height);
+                canvasCtx.restore();
+            });
+
+            let lastExecutionTime = 0;
+            const targetThrottleInterval = 1000 / 15; // 15 FPS execution floor
+
+            async function loopExecution(timestamp) {
+                if (videoEl.readyState >= 2 && (timestamp - lastExecutionTime >= targetThrottleInterval)) {
+                    lastExecutionTime = timestamp;
+                    await selfieSegmentation.send({ image: videoEl });
+                }
+                requestAnimationFrame(loopExecution);
+            }
+            requestAnimationFrame(loopExecution);
+        }
+
+        async function switchCamera(slotIndex, deviceId) {
+            // Disconnect current slot's assignment
+            videoElements[slotIndex].srcObject = null;
+            slotCurrentDeviceIds[slotIndex] = null;
+
+            // Run a clean-up sweep: if a hardware stream is no longer used by ANY slot, shut it down entirely
+            cleanUnusedHardwareStreams();
+
+            try {
+                let streamToUse = null;
+
+                // If this hardware device is already open elsewhere, use a software clone!
+                if (hardwareStreamCache[deviceId]) {
+                    streamToUse = hardwareStreamCache[deviceId].clone();
+                } else {
+                    // Otherwise, request a new hardware stream with ultra-relaxed, safe parameters
+                    streamToUse = await navigator.mediaDevices.getUserMedia({
+                        video: {
+                            deviceId: deviceId, // No exact constraint: safe and compliant layout fallbacks
+                            width: { ideal: 640 },
+                            height: { ideal: 480 }
+                        }
+                    });
+                    // Save the base stream to our cache
+                    hardwareStreamCache[deviceId] = streamToUse;
+                }
+
+                // Bind stream to this slot
+                videoElements[slotIndex].srcObject = streamToUse;
+                slotCurrentDeviceIds[slotIndex] = deviceId;
+                selectElements[slotIndex].value = deviceId;
+
+            } catch (err) {
+                console.error(`Resilient fallback triggered. Error mapping slot ${slotIndex}:`, err);
+            }
+        }
+
+        function cleanUnusedHardwareStreams() {
+            Object.keys(hardwareStreamCache).forEach(id => {
+                const isStillInUse = slotCurrentDeviceIds.includes(id);
+                if (!isStillInUse && hardwareStreamCache[id]) {
+                    hardwareStreamCache[id].getTracks().forEach(track => track.stop());
+                    delete hardwareStreamCache[id];
+                }
+            });
+        }
+
+        function toggleDropdowns() {
+            menusAreVisible = !menusAreVisible;
+            if (menusAreVisible) {
+                crossContainer.classList.remove('selectors-hidden');
+                toggleButton.textContent = "Hide Selectors";
+            } else {
+                crossContainer.classList.add('selectors-hidden');
+                toggleButton.textContent = "Show Selectors";
+            }
+        }
+
+        function populateDropdown(selectEl, slotIndex) {
+            availableDevices.forEach((device, devIndex) => {
+                const option = document.createElement('option');
+                option.value = device.deviceId;
+                option.text = device.label || `Camera ${devIndex + 1}`;
+                selectEl.appendChild(option);
+            });
+
+            if (availableDevices.length > 0) {
+                selectEl.selectedIndex = slotIndex % availableDevices.length;
+            }
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
