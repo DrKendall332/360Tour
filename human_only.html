@@ -223,7 +223,7 @@
                             Math.pow(g - TARGET_G, 2) +
                             Math.pow(b - TARGET_B, 2)
                         );
-                        const thre_slider = document.getElementById("threshold_slider").value;
+                        const thresh_slider = document.getElementById("threshold_slider").value;
                         // If color matches backdrop matrix, turn pixel into opaque solid black.
                         // This prevents the raw video playing right underneath from leaking through.
                         if (colorDistance < thresh_slider) {
