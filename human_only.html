@@ -108,10 +108,10 @@
 </head>
 <body>
 
-    <input type="range" style="position:fixed; bottom:20px; left:20px" id="threshold_slider" min="0" max="255">
-    <input type="range" style="position:fixed; bottom:80px; left:20px" id="R_slider" min="0" max="255">
-    <input type="range" style="position:fixed; bottom:60px; left:20px" id="G_slider" min="0" max="255">
-    <input type="range" style="position:fixed; bottom:40px; left:20px" id="B_slider" min="0" max="255">
+    <input type="range" style="position:fixed; bottom:20px; left:20px" id="threshold_slider" min="0" max="255" onchange="change_t()">
+    <input type="range" style="position:fixed; bottom:80px; left:20px" id="R_slider" min="0" max="255" onchange="change_r()">
+    <input type="range" style="position:fixed; bottom:60px; left:20px" id="G_slider" min="0" max="255" onchange="change_g()">
+    <input type="range" style="position:fixed; bottom:40px; left:20px" id="B_slider" min="0" max="255" onchange="change_b()">
     
     <div id="cross-layout" class="cross-container">
         <div id="box-top" class="cam-box">
@@ -202,6 +202,23 @@
             }
         }
 
+        var dr=0;
+        var dg=0;
+        var db=0;
+
+        function change_r() {
+            dr = document.getElementById("R_slider").value;
+        }
+        function change_g() {
+            dg = document.getElementById("G_slider").value;
+        }
+        function change_b() {
+            db = document.getElementById("B_slider").value;
+        }
+        function change_t() {
+            thresh_slider = document.getElementById("threshold_slider").value;
+        }
+
         function startChromaKeyLoop(slotIndex) {
             const videoEl = videoElements[slotIndex];
             const canvasEl = canvasElements[slotIndex];
@@ -221,17 +238,13 @@
                         const r = frameData.data[i];
                         const g = frameData.data[i + 1];
                         const b = frameData.data[i + 2];
-
-                        const dr = document.getElementById("R_slider").value;
-                        const dg = document.getElementById("G_slider").value;
-                        const db = document.getElementById("B_slider").value;
                         
                         const colorDistance = Math.sqrt(
                             Math.pow(r - dr, 2) +
                             Math.pow(g - dg, 2) +
                             Math.pow(b - db, 2)
                         );
-                        const thresh_slider = document.getElementById("threshold_slider").value;
+                        
                         // If color matches backdrop matrix, turn pixel into opaque solid black.
                         // This prevents the raw video playing right underneath from leaking through.
                         if (colorDistance < thresh_slider) {
