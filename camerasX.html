@@ -102,6 +102,8 @@
         </div>
     </div>
 
+    <button onclick="toggleDropdown()">Hide Camera Select</button>
+
     <script>
         const videoElements = [
             document.getElementById('video-0'),
@@ -159,6 +161,21 @@
 
             if (availableDevices.length > 0) {
                 selectEl.selectedIndex = slotIndex % availableDevices.length;
+            }
+        }
+
+        function toggleDropdown() {
+            if( document.getElementById("select-0").style.visibility==="visible") {
+                document.getElementById("select-0").style.visibility="hidden";
+                document.getElementById("select-1").style.visibility="hidden";
+                document.getElementById("select-2").style.visibility="hidden";
+                document.getElementById("select-3").style.visibility="hidden";
+            },
+            {
+                document.getElementById("select-0").style.visibility="visible";
+                document.getElementById("select-1").style.visibility="visible";
+                document.getElementById("select-2").style.visibility="visible";
+                document.getElementById("select-3").style.visibility="visible";
             }
         }
 
