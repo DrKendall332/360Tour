@@ -108,10 +108,10 @@
 </head>
 <body>
 
-    <input type="range" style="position:fixed; bottom:20px; left:20px" id="threshold_slider" min="0" max="255" onchange="change_t()">
-    <input type="range" style="position:fixed; bottom:80px; left:20px" id="R_slider" min="0" max="255" onchange="change_r()">
-    <input type="range" style="position:fixed; bottom:60px; left:20px" id="G_slider" min="0" max="255" onchange="change_g()">
-    <input type="range" style="position:fixed; bottom:40px; left:20px" id="B_slider" min="0" max="255" onchange="change_b()">
+    <input type="range" style="position:fixed; bottom:20px; left:20px" id="threshold_slider" min="0" max="255" onchange="change_t()" value="110">
+    <input type="range" style="position:fixed; bottom:80px; left:20px" id="R_slider" min="0" max="255" onchange="change_r()" value="0">
+    <input type="range" style="position:fixed; bottom:60px; left:20px" id="G_slider" min="0" max="255" onchange="change_g()" value="255">
+    <input type="range" style="position:fixed; bottom:40px; left:20px" id="B_slider" min="0" max="255" onchange="change_b()" value="0">
     
     <div id="cross-layout" class="cross-container">
         <div id="box-top" class="cam-box">
@@ -203,8 +203,9 @@
         }
 
         var dr=0;
-        var dg=0;
+        var dg=255;
         var db=0;
+        var thresh_slider=110;
 
         function change_r() {
             dr = document.getElementById("R_slider").value;
