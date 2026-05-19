@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chroma Key Cross Display with Tuning Slider</title>
+    <title>Layer-Stabilized Chroma Key Cross Display</title>
     <style>
         body {
             margin: 0;
@@ -15,7 +15,6 @@
             height: 100vh;
             overflow: hidden;
             font-family: sans-serif;
-            user-select: none;
         }
 
         /* 3x3 Grid Container locked to full screen height */
@@ -37,6 +36,7 @@
             overflow: hidden;
         }
 
+        /* The raw video stream sits directly in the layout flow so the browser renders it */
         .cam-box video {
             position: absolute;
             top: 0;
@@ -44,9 +44,10 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: 1; 
+            z-index: 1; /* Behind the canvas */
         }
 
+        /* The canvas sits directly on top, completely blocking the video out of sight */
         .cam-box canvas {
             position: absolute;
             top: 0;
@@ -54,7 +55,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: 2; 
+            z-index: 2; /* In front of the video */
             background-color: #000;
         }
 
@@ -63,7 +64,7 @@
             bottom: 8px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 10; 
+            z-index: 10; /* Highest layer index to stay interactable */
             background: rgba(0, 0, 0, 0.75);
             color: #fff;
             border: 1px solid #555;
@@ -75,7 +76,6 @@
             display: block;
         }
 
-        /* Control UI Panels */
         .toggle-btn {
             position: fixed;
             bottom: 20px;
@@ -88,52 +88,18 @@
             font-size: 14px;
             border-radius: 6px;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
-        .slider-container {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 100;
-            background: rgba(30, 30, 30, 0.85);
-            color: #fff;
-            border: 1px solid #555;
-            padding: 12px 16px;
-            font-size: 13px;
-            border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            min-width: 180px;
-        }
-
-        .slider-container label {
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
-        }
-
-        .slider-container input[type="range"] {
-            width: 100%;
-            cursor: pointer;
-            accent-color: #555;
-        }
-
-        /* Global UI Hiding Classes */
-        body.selectors-hidden .camera-select,
-        body.selectors-hidden .slider-container {
+        .cross-container.selectors-hidden .camera-select {
             display: none;
         }
 
-        /* Grid Map Positions */
+        /* Positions and Rotations (Applied to the canvas layer only) */
         #box-top    { grid-row: 1; grid-column: 2; }
         #box-right  { grid-row: 2; grid-column: 3; }
         #box-bottom { grid-row: 3; grid-column: 2; }
         #box-left   { grid-row: 2; grid-column: 1; }
 
-        /* Rotations */
         #box-top canvas    { }
         #box-right canvas  { transform: rotate(90deg); }
         #box-bottom canvas { transform: rotate(180deg); }
@@ -168,14 +134,6 @@
         </div>
     </div>
 
-    <div id="slider-panel" class="slider-container">
-        <label for="threshold-slider">
-            <span>Chroma Threshold</span>
-            <span id="threshold-value">110</span>
-        </label>
-        <input type="range" id="threshold-slider" min="0" max="255" value="110">
-    </div>
-
     <button id="btn-toggle" class="toggle-btn">Hide Selectors</button>
 
     <script>
@@ -194,33 +152,143 @@
             document.getElementById('select-2'), document.getElementById('select-3')
         ];
 
+        const crossContainer = document.getElementById('cross-layout');
         const toggleButton = document.getElementById('btn-toggle');
-        const thresholdSlider = document.getElementById('threshold-slider');
-        const thresholdValueDisplay = document.getElementById('threshold-value');
 
         let availableDevices = [];
         let hardwareStreamCache = {}; 
         let slotCurrentDeviceIds = [null, null, null, null];
         let menusAreVisible = true;
 
-        // CHROMA KEY CONFIGURATION (Changed to a mutable 'let' so the slider can update it)
-        const TARGET_R = 0;   // Pure Green Screen Backdrop
+        // CHROMA KEY TARGET CONFIGURATION
+        const TARGET_R = 0;   // Pure Green Screen Default
         const TARGET_G = 255; 
         const TARGET_B = 0;   
-        let THRESHOLD = 110; 
+        const THRESHOLD = 110; 
 
         async function init() {
             toggleButton.addEventListener('click', toggleDropdowns);
-            
-            // Set up real-time slider listener
-            thresholdSlider.addEventListener('input', (e) => {
-                THRESHOLD = parseInt(e.target.value, 10);
-                thresholdValueDisplay.textContent = THRESHOLD;
-            });
 
             try {
                 await navigator.mediaDevices.getUserMedia({ video: true });
                 const devices = await navigator.mediaDevices.enumerateDevices();
                 availableDevices = devices.filter(device => device.kind === 'videoinput');
 
-                if
+                if (availableDevices.length === 0) {
+                    alert('No webcams detected.');
+                    return;
+                }
+
+                selectElements.forEach((selectEl, slotIndex) => {
+                    populateDropdown(selectEl, slotIndex);
+                    selectEl.addEventListener('change', (e) => {
+                        switchCamera(slotIndex, e.target.value);
+                    });
+                });
+
+                for (let i = 0; i < 4; i++) {
+                    startChromaKeyLoop(i);
+                    const defaultDevice = availableDevices[i % availableDevices.length];
+                    await switchCamera(i, defaultDevice.deviceId);
+                }
+
+            } catch (err) {
+                console.error('Init error:', err);
+            }
+        }
+
+        function startChromaKeyLoop(slotIndex) {
+            const videoEl = videoElements[slotIndex];
+            const canvasEl = canvasElements[slotIndex];
+            const ctx = canvasEl.getContext('2d', { willReadFrequently: true });
+
+            canvasEl.width = 640;
+            canvasEl.height = 480;
+
+            function processFrame() {
+                if (videoEl.readyState >= 2) {
+                    ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+
+                    const frameData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+                    const length = frameData.data.length;
+
+                    for (let i = 0; i < length; i += 4) {
+                        const r = frameData.data[i];
+                        const g = frameData.data[i + 1];
+                        const b = frameData.data[i + 2];
+
+                        const colorDistance = Math.sqrt(
+                            Math.pow(r - TARGET_R, 2) +
+                            Math.pow(g - TARGET_G, 2) +
+                            Math.pow(b - TARGET_B, 2)
+                        );
+
+                        // If color matches backdrop matrix, turn pixel into opaque solid black.
+                        // This prevents the raw video playing right underneath from leaking through.
+                        if (colorDistance < THRESHOLD) {
+                            frameData.data[i] = 0;     // Red
+                            frameData.data[i + 1] = 0; // Green
+                            frameData.data[i + 2] = 0; // Blue
+                            frameData.data[i + 3] = 255; // Alpha (Fully Opaque)
+                        }
+                    }
+
+                    ctx.putImageData(frameData, 0, 0);
+                }
+                requestAnimationFrame(processFrame);
+            }
+            requestAnimationFrame(processFrame);
+        }
+
+        async function switchCamera(slotIndex, deviceId) {
+            videoElements[slotIndex].srcObject = null;
+            slotCurrentDeviceIds[slotIndex] = null;
+            cleanUnusedHardwareStreams();
+
+            try {
+                let streamToUse = null;
+                if (hardwareStreamCache[deviceId]) {
+                    streamToUse = hardwareStreamCache[deviceId].clone();
+                } else {
+                    streamToUse = await navigator.mediaDevices.getUserMedia({
+                        video: { deviceId: deviceId, width: { ideal: 640 }, height: { ideal: 480 } }
+                    });
+                    hardwareStreamCache[deviceId] = streamToUse;
+                }
+                videoElements[slotIndex].srcObject = streamToUse;
+                slotCurrentDeviceIds[slotIndex] = deviceId;
+                selectElements[slotIndex].value = deviceId;
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function cleanUnusedHardwareStreams() {
+            Object.keys(hardwareStreamCache).forEach(id => {
+                if (!slotCurrentDeviceIds.includes(id) && hardwareStreamCache[id]) {
+                    hardwareStreamCache[id].getTracks().forEach(track => track.stop());
+                    delete hardwareStreamCache[id];
+                }
+            });
+        }
+
+        function toggleDropdowns() {
+            menusAreVisible = !menusAreVisible;
+            crossContainer.classList.toggle('selectors-hidden', !menusAreVisible);
+            toggleButton.textContent = menusAreVisible ? "Hide Selectors" : "Show Selectors";
+        }
+
+        function populateDropdown(selectEl, slotIndex) {
+            availableDevices.forEach((device, devIndex) => {
+                const option = document.createElement('option');
+                option.value = device.deviceId;
+                option.text = device.label || `Camera ${devIndex + 1}`;
+                selectEl.appendChild(option);
+            });
+            if (availableDevices.length > 0) selectEl.selectedIndex = slotIndex % availableDevices.length;
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
