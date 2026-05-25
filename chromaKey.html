@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layer-Stabilized Chroma Key Cross Display</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: sans-serif;
+        }
+
+        /* 3x3 Grid Container locked to full screen height */
+        .cross-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            width: 100vh;  
+            height: 100vh; 
+            gap: 0;        
+        }
+
+        .cam-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #000; 
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* The raw video stream sits directly in the layout flow so the browser renders it */
+        .cam-box video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1; /* Behind the canvas */
+        }
+
+        /* The canvas sits directly on top, completely blocking the video out of sight */
+        .cam-box canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2; /* In front of the video */
+            background-color: #000;
+        }
+
+        .camera-select {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10; /* Highest layer index to stay interactable */
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            border: 1px solid #555;
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+            max-width: 90%;
+            cursor: pointer;
+            display: block;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(30, 30, 30, 0.85);
+            color: #fff;
+            border: 1px solid #555;
+            padding: 10px 16px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .cross-container.selectors-hidden .camera-select {
+            display: none;
+        }
+
+        /* Positions and Rotations (Applied to the canvas layer only) */
+        #box-top    { grid-row: 1; grid-column: 2; }
+        #box-right  { grid-row: 2; grid-column: 3; }
+        #box-bottom { grid-row: 3; grid-column: 2; }
+        #box-left   { grid-row: 2; grid-column: 1; }
+
+        #box-top canvas    { }
+        #box-right canvas  { transform: rotate(90deg); }
+        #box-bottom canvas { transform: rotate(180deg); }
+        #box-left canvas   { transform: rotate(270deg); }
+    </style>
+</head>
+<body>
+
+    <input type="range" style="position:fixed; bottom:20px; left:20px" id="threshold_slider" min="0" max="255" onchange="change_t()" value="110">
+    <input type="range" style="position:fixed; bottom:40px; left:20px" id="contrast_slider" min="-100" max="200" onchange="change_t()" value="0">
+    <input type="range" style="position:fixed; bottom:60px; left:20px" id="sat_slider" min="0" max="100" onchange="change_t()" value="0">
+    
+    <div id="cross-layout" class="cross-container">
+        <div id="box-top" class="cam-box">
+            <video id="video-0" autoplay playsinline muted></video>
+            <canvas id="canvas-0"></canvas>
+            <select id="select-0" class="camera-select"></select>
+        </div>
+
+        <div id="box-right" class="cam-box">
+            <video id="video-1" autoplay playsinline muted></video>
+            <canvas id="canvas-1"></canvas>
+            <select id="select-1" class="camera-select"></select>
+        </div>
+
+        <div id="box-bottom" class="cam-box">
+            <video id="video-2" autoplay playsinline muted></video>
+            <canvas id="canvas-2"></canvas>
+            <select id="select-2" class="camera-select"></select>
+        </div>
+
+        <div id="box-left" class="cam-box">
+            <video id="video-3" autoplay playsinline muted></video>
+            <canvas id="canvas-3"></canvas>
+            <select id="select-3" class="camera-select"></select>
+        </div>
+    </div>
+
+    <button id="btn-toggle" class="toggle-btn">Hide Selectors</button>
+
+    <script>
+
+        const videoElements = [
+            document.getElementById('video-0'), document.getElementById('video-1'),
+            document.getElementById('video-2'), document.getElementById('video-3')
+        ];
+
+        const canvasElements = [
+            document.getElementById('canvas-0'), document.getElementById('canvas-1'),
+            document.getElementById('canvas-2'), document.getElementById('canvas-3')
+        ];
+
+        const selectElements = [
+            document.getElementById('select-0'), document.getElementById('select-1'),
+            document.getElementById('select-2'), document.getElementById('select-3')
+        ];
+
+        const crossContainer = document.getElementById('cross-layout');
+        const toggleButton = document.getElementById('btn-toggle');
+
+        let availableDevices = [];
+        let hardwareStreamCache = {}; 
+        let slotCurrentDeviceIds = [null, null, null, null];
+        let menusAreVisible = true;
+
+        async function init() {
+            toggleButton.addEventListener('click', toggleDropdowns);
+
+            try {
+                await navigator.mediaDevices.getUserMedia({ video: true });
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                availableDevices = devices.filter(device => device.kind === 'videoinput');
+
+                if (availableDevices.length === 0) {
+                    alert('No webcams detected.');
+                    return;
+                }
+
+		availableDevices.forEach((selectDev, ind) => {
+			selectDev.whiteBalanceMode = false;
+		});
+
+                selectElements.forEach((selectEl, slotIndex) => {
+                    populateDropdown(selectEl, slotIndex);
+                    selectEl.addEventListener('change', (e) => {
+                        switchCamera(slotIndex, e.target.value);
+                    });
+                });
+
+                for (let i = 0; i < 4; i++) {
+                    startChromaKeyLoop(i);
+                    const defaultDevice = availableDevices[i % availableDevices.length];
+                    await switchCamera(i, defaultDevice.deviceId);
+                }
+
+            } catch (err) {
+                console.error('Init error:', err);
+            }
+        }
+
+        var thresh_slider=110;
+	var contrast=0;
+	var saturation = 0;
+        function change_t() {
+            thresh_slider = Number(document.getElementById("threshold_slider").value);
+	    contrast = Number(document.getElementById("contrast_slider").value);
+	    saturation = Number(document.getElementById("sat_slider").value) /100;
+        }
+
+        function startChromaKeyLoop(slotIndex) {
+            const videoEl = videoElements[slotIndex];
+            const canvasEl = canvasElements[slotIndex];
+            const ctx = canvasEl.getContext('2d', { willReadFrequently: true });
+
+            canvasEl.width = 640;
+            canvasEl.height = 480;
+
+            function processFrame() {
+                if (videoEl.readyState >= 2) {
+                    ctx.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+
+                    const frameData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+                    const length = frameData.data.length;
+		    let c_factor = (contrast/100) +1;
+	            let intercept = 128*(1-c_factor);
+
+                    for (let i = 0; i < length; i += 4) {
+                        const r = frameData.data[i];
+                        const g = frameData.data[i + 1];
+                        const b = frameData.data[i + 2];
+                        
+                        // If color matches backdrop matrix, turn pixel into opaque solid black.
+                        // This prevents the raw video playing right underneath from leaking through.
+			
+			const Mx = Math.max(frameData.data[i], frameData.data[i+1], frameData.data[i+2]);
+			const Mn = Math.min(frameData.data[i], frameData.data[i+1], frameData.data[i+2]);
+			const Mshift = Math.min(255-Mx, Mn);
+
+			frameData.data[i] = frameData.data[i] + (frameData.data[i]===Mx && saturation*Mshift) - (frameData.data[i]===Mn && saturation*Mshift);
+			frameData.data[i+1] = frameData.data[i+1] + (frameData.data[i+1]===Mx && saturation*Mshift) - (frameData.data[i+1]===Mn && saturation*Mshift);
+			frameData.data[i+2] = frameData.data[i+2] + (frameData.data[i+2]===Mx && saturation*Mshift) - (frameData.data[i+2]===Mn && saturation*Mshift);
+
+			frameData.data[i] = frameData.data[i]*c_factor+intercept;     // Red
+                        frameData.data[i + 1] = frameData.data[i+1]*c_factor+intercept; // Green
+                        frameData.data[i + 2] = frameData.data[i+2]*c_factor+intercept; // Blue
+
+                        if (frameData.data[i+1] - thresh_slider > Math.max(frameData.data[i],frameData.data[i+2])) {
+                            frameData.data[i] = 0;     // Red
+                            frameData.data[i + 1] = 0; // Green
+                            frameData.data[i + 2] = 0; // Blue
+                            frameData.data[i + 3] = 255; // Alpha (Fully Opaque)
+                        }
+                            
+                    }
+
+                    ctx.putImageData(frameData, 0, 0);
+                }
+                requestAnimationFrame(processFrame);
+            }
+            requestAnimationFrame(processFrame);
+        }
+
+        async function switchCamera(slotIndex, deviceId) {
+    videoElements[slotIndex].srcObject = null;
+    slotCurrentDeviceIds[slotIndex] = null;
+    cleanUnusedHardwareStreams();
+
+    try {
+        let streamToUse = null;
+        if (hardwareStreamCache[deviceId]) {
+            streamToUse = hardwareStreamCache[deviceId].clone();
+        } else {
+            streamToUse = await navigator.mediaDevices.getUserMedia({
+                video: { deviceId: deviceId, width: { ideal: 640 }, height: { ideal: 480 } }
+            });
+            
+            // --- ADVANCED HARDWARE CONTROLS BLOCK ---
+            // Extract the active video track from the physical hardware stream
+            const videoTrack = streamToUse.getVideoTracks()[0];
+            
+            // Check if the browser and hardware support capability querying
+            if (videoTrack.getCapabilities) {
+                const capabilities = videoTrack.getCapabilities();
+                
+                // Inspect if 'manual' white balance is an option for this specific camera
+                if (capabilities.whiteBalanceMode && capabilities.whiteBalanceMode.includes('manual')) {
+                    
+                    // Apply the lock constraint
+                    await videoTrack.applyConstraints({
+                        advanced: [{ 
+                            whiteBalanceMode: 'continuous'
+                            // Optional: If you want to lock it to a specific warmth, uncomment below
+                            //colorTemperature: 5500
+
+                        }]
+                    });
+                    console.log(`Slot ${slotIndex}: Auto White Balance successfully disabled.`);
+                } else {
+                    console.warn(`Slot ${slotIndex}: Camera hardware does not allow manual white balance overrides.`);
+                }
+            } else {
+                console.warn(`Slot ${slotIndex}: Browser does not support advanced MediaTrack capabilities (Non-Chromium).`);
+            }
+            // ----------------------------------------
+
+            hardwareStreamCache[deviceId] = streamToUse;
+        }
+        
+        videoElements[slotIndex].srcObject = streamToUse;
+        slotCurrentDeviceIds[slotIndex] = deviceId;
+        selectElements[slotIndex].value = deviceId;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+        function cleanUnusedHardwareStreams() {
+            Object.keys(hardwareStreamCache).forEach(id => {
+                if (!slotCurrentDeviceIds.includes(id) && hardwareStreamCache[id]) {
+                    hardwareStreamCache[id].getTracks().forEach(track => track.stop());
+                    delete hardwareStreamCache[id];
+                }
+            });
+        }
+
+        function toggleDropdowns() {
+            menusAreVisible = !menusAreVisible;
+            crossContainer.classList.toggle('selectors-hidden', !menusAreVisible);
+            toggleButton.textContent = menusAreVisible ? "Hide Selectors" : "Show Selectors";
+
+            if(document.getElementById("threshold_slider").style.visibility==="hidden") {
+                document.getElementById("threshold_slider").style.visibility="visible";
+                document.getElementById("contrast_slider").style.visibility="visible";
+                document.getElementById("sat_slider").style.visibility="visible";
+                document.getElementById("initialise").style.visibility="visible";
+            } else {
+                document.getElementById("threshold_slider").style.visibility="hidden";
+                document.getElementById("contrast_slider").style.visibility="hidden";
+                document.getElementById("sat_slider").style.visibility="hidden";
+                document.getElementById("initialise").style.visibility="hidden";
+            }
+        }
+
+        function populateDropdown(selectEl, slotIndex) {
+            availableDevices.forEach((device, devIndex) => {
+                const option = document.createElement('option');
+                option.value = device.deviceId;
+                option.text = device.label || `Camera ${devIndex + 1}`;
+                selectEl.appendChild(option);
+            });
+            if (availableDevices.length > 0) selectEl.selectedIndex = slotIndex % availableDevices.length;
+        }
+
+const button = document.createElement("button");
+button.innerHTML = "capture";
+document.body.append(button);
+button.addEventListener("click", async () => {
+const stream = await navigator.mediaDevices.getDisplayMedia();
+const recoder = new MediaRecorder(stream);
+recoder.start();
+
+const [video] = stream.getVideoTracks();
+video.addEventListener("ended", () => {
+  recoder.stop();
+});
+
+recoder.addEventListener("dataavailable", (evt) => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(evt.data);
+  a.download = "capture.webm";
+  a.click();
+});
+
+});
+
+
+
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
