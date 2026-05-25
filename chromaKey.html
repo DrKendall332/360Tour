@@ -141,6 +141,7 @@
     <button id="btn-toggle" class="toggle-btn">Hide Selectors</button>
 
     <script>
+	let activeStreams = [null, null, null, null];
 
         const videoElements = [
             document.getElementById('video-0'), document.getElementById('video-1'),
@@ -262,68 +263,7 @@
             requestAnimationFrame(processFrame);
         }
 
-        async function switchCamera(slotIndex, deviceId) {
-    videoElements[slotIndex].srcObject = null;
-    slotCurrentDeviceIds[slotIndex] = null;
-    cleanUnusedHardwareStreams();
-
-    try {
-        let streamToUse = null;
-        if (hardwareStreamCache[deviceId]) {
-            streamToUse = hardwareStreamCache[deviceId].clone();
-        } else {
-            streamToUse = await navigator.mediaDevices.getUserMedia({
-                video: { deviceId: deviceId, width: { ideal: 640 }, height: { ideal: 480 } }
-            });
-            
-            // --- ADVANCED HARDWARE CONTROLS BLOCK ---
-            // Extract the active video track from the physical hardware stream
-            const videoTrack = streamToUse.getVideoTracks()[0];
-            
-            // Check if the browser and hardware support capability querying
-            if (videoTrack.getCapabilities) {
-                const capabilities = videoTrack.getCapabilities();
-                
-                // Inspect if 'manual' white balance is an option for this specific camera
-                if (capabilities.whiteBalanceMode && capabilities.whiteBalanceMode.includes('manual')) {
-                    
-                    // Apply the lock constraint
-                    await videoTrack.applyConstraints({
-                        advanced: [{ 
-                            whiteBalanceMode: 'continuous'
-                            // Optional: If you want to lock it to a specific warmth, uncomment below
-                            //colorTemperature: 5500
-
-                        }]
-                    });
-                    console.log(`Slot ${slotIndex}: Auto White Balance successfully disabled.`);
-                } else {
-                    console.warn(`Slot ${slotIndex}: Camera hardware does not allow manual white balance overrides.`);
-                }
-            } else {
-                console.warn(`Slot ${slotIndex}: Browser does not support advanced MediaTrack capabilities (Non-Chromium).`);
-            }
-            // ----------------------------------------
-
-            hardwareStreamCache[deviceId] = streamToUse;
-        }
-        
-        videoElements[slotIndex].srcObject = streamToUse;
-        slotCurrentDeviceIds[slotIndex] = deviceId;
-        selectElements[slotIndex].value = deviceId;
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-        function cleanUnusedHardwareStreams() {
-            Object.keys(hardwareStreamCache).forEach(id => {
-                if (!slotCurrentDeviceIds.includes(id) && hardwareStreamCache[id]) {
-                    hardwareStreamCache[id].getTracks().forEach(track => track.stop());
-                    delete hardwareStreamCache[id];
-                }
-            });
-        }
+       
 
         function toggleDropdowns() {
             menusAreVisible = !menusAreVisible;
@@ -340,6 +280,31 @@
                 document.getElementById("contrast_slider").style.visibility="hidden";
                 document.getElementById("sat_slider").style.visibility="hidden";
                 document.getElementById("initialise").style.visibility="hidden";
+            }
+        }
+
+	async function switchCamera(slotIndex, deviceId) {
+            if (activeStreams[slotIndex]) {
+                activeStreams[slotIndex].getTracks().forEach(track => track.stop());
+                activeStreams[slotIndex] = null;
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        deviceId: { exact: deviceId },
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        frameRate: { ideal: 15 } 
+                    }
+                });
+
+                videoElements[slotIndex].srcObject = stream;
+                activeStreams[slotIndex] = stream;
+                selectElements[slotIndex].value = deviceId;
+
+            } catch (err) {
+                console.error(`Error switching slot ${slotIndex}:`, err);
             }
         }
 
